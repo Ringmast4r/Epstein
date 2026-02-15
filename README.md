@@ -1,36 +1,30 @@
-# Epstein Files Index Monitor
-
 <div align="center">
 
-## 🔴 EXPOSED TRAFFICKERS, ENABLERS, AND CO-CONSPIRATORS
+<img src="banner.svg" alt="0 ARRESTS — 58 days since the Epstein files were released" width="900"/>
 
-# 0 ARRESTS
+<br/>
 
-### It has been **16 days** since the DOJ released 931,000+ files exposing a global trafficking network involving billionaires, politicians, and royalty.
-
-### Nobody has been arrested. Nobody has been charged. Not one.
-
----
-
-*This is not left vs right. This is not political. This is raw evil vs. basic human decency.*
-
-*Children were raped by the most powerful people on the planet. The evidence is public. The names are known. The flight logs exist. And every single one of them is still free.*
+> **Children were raped by the most powerful people on the planet.**
+> **The evidence is public. The names are known. The flight logs exist.**
+> **And every single one of them is still free.**
 
 ---
 
 </div>
 
+> [!CAUTION]
+> The DOJ released ~931,000 files exposing a global child sex trafficking network — then **removed bulk download links** and forced individual file retrieval across 931,000 PDFs to make access as difficult as possible. This repository exists to make sure nothing disappears without a record.
+
 ## What This Repo Does
 
-The DOJ released ~931,000 PDFs across 12 datasets under the **Epstein Files Transparency Act** (Public Law 119-38) — then [removed bulk downloads](https://www.justice.gov/epstein) and forced individual file retrieval to make access as difficult as possible.
+This repository **automatically monitors** the DOJ Epstein Files index every 6 hours:
+- Detects **new files** added to any dataset
+- Detects **files quietly removed** or altered
+- Detects **new datasets** appearing beyond the current 12
+- Maintains a running **changelog** of every change
+- Updates the day counter above — it keeps going up until someone is in handcuffs
 
-This repository **automatically monitors** the DOJ's file index every 6 hours to detect:
-- New files added
-- Files quietly removed or altered
-- Entirely new datasets appearing
-- Changes to page counts or availability
-
-No PDFs are stored here — only the index. We track what exists so nothing disappears without a record.
+No PDFs are stored here — only the manifest/index.
 
 ## Key Numbers
 
@@ -40,8 +34,9 @@ No PDFs are stored here — only the index. We track what exists so nothing disa
 | **Total size** | ~360 GB |
 | **Datasets** | 12 |
 | **Arrests since release** | **0** |
-| **First release** | Jan 30, 2026 |
-| **ZIP downloads killed** | Feb 11, 2026 |
+| **First release** | Dec 19, 2025 |
+| **Major dump** | Jan 30, 2026 (~3.5 million pages) |
+| **ZIP downloads killed by DOJ** | Feb 11, 2026 |
 | **Victims represented** | 200+ |
 | **Pages entirely blacked out** | 500+ |
 
@@ -86,6 +81,7 @@ python tools/monitor.py --seed
 
 ```
 ├── .github/workflows/monitor.yml   # Scheduled monitoring action
+├── banner.svg                      # Auto-generated arrest counter banner
 ├── tools/
 │   ├── monitor.py                  # Main monitoring script
 │   └── requirements.txt            # Python dependencies
@@ -106,11 +102,13 @@ python tools/monitor.py --seed
 
 ## Why This Matters
 
-On Feb 1, 2026, attorneys for **200+ victims** asked federal judges to take down the DOJ Epstein website, calling it *"the single most egregious violation of victim privacy in one day in United States history."* The DOJ had failed to redact victim names and accidentally published unredacted images.
+On Feb 1, 2026, attorneys for **200+ victims** asked federal judges to take down the DOJ Epstein website, calling it *"the single most egregious violation of victim privacy in one day in United States history."* The DOJ had failed to redact victim names and accidentally published unredacted nude images of young women.
 
 On Feb 10, Rep. Ro Khanna read **6 names** from unredacted files on the House floor — people he said are *"likely incriminated."* The Deputy AG called them *"completely random people."*
 
 On Feb 11, the DOJ **removed all bulk download links**. You can no longer download datasets as ZIP files. Only individual PDFs, one at a time, across 931,000 files.
+
+On Feb 12, Goldman Sachs CLO **Kathryn Ruemmler** announced her resignation after files revealed she was one of three people Epstein called after his 2019 arrest. People are running. Nobody is chasing.
 
 They are not hiding this because they want transparency. They are hiding this because the names on those flight logs and in those emails belong to people who are still in power.
 

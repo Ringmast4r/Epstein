@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="430" rx="12" fill="#0d0d0d"/>
+  <rect x="4" y="4" width="892" height="422" rx="10" fill="none" stroke="#cc0000" stroke-width="3"/>
+
+  <!-- Red pulse bar top -->
+  <rect x="4" y="4" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
+
+  <!-- EXPOSED line -->
+  <text x="450" y="52" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="bold" fill="#cc0000" letter-spacing="6" filter="url(#glow)">&#x1F534; EXPOSED TRAFFICKERS, ENABLERS, AND CO-CONSPIRATORS &#x1F534;</text>
+
+  <!-- Main arrest counter -->
+  <text x="450" y="140" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="100" font-weight="900" fill="#ff0000" filter="url(#glow)">0 ARRESTS</text>
+
+  <!-- Days counter -->
+  <text x="450" y="195" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="22" fill="#ff6666">It has been</text>
+  <text x="450" y="235" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="48" font-weight="900" fill="#ffffff">58 DAYS</text>
+  <text x="450" y="265" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">since the DOJ released 931,000+ files exposing a global trafficking network</text>
+  <text x="450" y="288" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">involving billionaires, politicians, and royalty.</text>
+
+  <!-- Nobody line -->
+  <text x="450" y="325" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="bold" fill="#ffffff">Nobody has been arrested. Nobody has been charged. Not one.</text>
+
+  <!-- Divider -->
+  <line x1="150" y1="348" x2="750" y2="348" stroke="#cc0000" stroke-width="1" opacity="0.6"/>
+
+  <!-- Bottom message -->
+  <text x="450" y="378" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999" font-style="italic">This is not left vs right. This is not political.</text>
+  <text x="450" y="400" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999" font-style="italic">This is raw evil vs. basic human decency.</text>
+
+  <!-- Red pulse bar bottom -->
+  <rect x="4" y="420" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
+</svg>
