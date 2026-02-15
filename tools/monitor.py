@@ -29,6 +29,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFESTS_DIR = REPO_ROOT / "manifests"
 CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
 SUMMARY_PATH = MANIFESTS_DIR / "summary.json"
+README_PATH = REPO_ROOT / "README.md"
+
+DATA_DROP_DATE = datetime(2026, 1, 30, tzinfo=timezone.utc)
 
 DOJ_BASE = "https://www.justice.gov"
 DOJ_LISTING = f"{DOJ_BASE}/epstein/doj-disclosures"
@@ -161,6 +164,21 @@ def append_changelog(entries):
 
     with open(CHANGELOG_PATH, "w", encoding="utf-8") as f:
         f.write(content)
+
+
+def update_readme():
+    """Update the day counter and arrest count in README.md."""
+    if not README_PATH.exists():
+        return
+    content = README_PATH.read_text(encoding="utf-8")
+    days = (datetime.now(timezone.utc) - DATA_DROP_DATE).days
+    # Update days counter
+    content = re.sub(
+        r"It has been \*\*\d+ days?\*\*",
+        f"It has been **{days} days**",
+        content,
+    )
+    README_PATH.write_text(content, encoding="utf-8")
 
 
 # --- Scraping DOJ ---
@@ -403,6 +421,7 @@ def run_seed():
     all_changelog.extend(seed_from_doj(session))
 
     update_summary()
+    update_readme()
     if all_changelog:
         all_changelog.insert(0, "**Initial seed** — built manifests from DOJ pages and community sources")
         append_changelog(all_changelog)
@@ -533,6 +552,7 @@ def run_monitor():
         time.sleep(1.5)
 
     update_summary()
+    update_readme()
     if changelog:
         append_changelog(changelog)
         print("\nChanges detected — changelog updated.")
