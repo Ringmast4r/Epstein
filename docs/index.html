@@ -158,6 +158,45 @@
             margin-top: 6px;
         }
 
+        /* Flight banner */
+        .flight-banner {
+            background: #0a0a0a;
+            padding: 0;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .flight-banner-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 24px;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .flight-banner-link:hover {
+            background: #1a0000;
+        }
+        .flight-banner-icon {
+            font-size: 28px;
+            color: #cc0000;
+        }
+        .flight-banner-text {
+            flex: 1;
+            font-size: 14px;
+            color: #ccc;
+        }
+        .flight-banner-text strong {
+            color: #fff;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+        .flight-banner-arrow {
+            font-size: 24px;
+            color: #cc0000;
+            font-weight: 900;
+        }
+
         /* Section shared */
         .section-title {
             font-size: 28px;
@@ -542,6 +581,20 @@
         <div class="stat-value">500+</div>
         <div class="stat-label">Blacked-out Pages</div>
     </div>
+    <div class="stat">
+        <a href="flights.html" style="text-decoration:none;">
+            <div class="stat-value red">1,708</div>
+            <div class="stat-label" style="color:#990000; font-weight:700;">&#x2708; Flight Map &rarr;</div>
+        </a>
+    </div>
+</section>
+
+<section class="flight-banner">
+    <a href="flights.html" class="flight-banner-link">
+        <span class="flight-banner-icon">&#x2708;</span>
+        <span class="flight-banner-text"><strong>INTERACTIVE FLIGHT MAP</strong> — 1,708 flights &middot; 135 airports &middot; 138 passengers &middot; Filter by name, date, airport</span>
+        <span class="flight-banner-arrow">&rarr;</span>
+    </a>
 </section>
 
 <section class="datasets">

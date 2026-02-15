@@ -26,6 +26,9 @@ This repository **automatically monitors** the DOJ Epstein Files index every 6 h
 
 No PDFs are stored here — only the manifest/index.
 
+### [&#x2708; Interactive Flight Map — 1,708 Flights](https://ringmast4r.github.io/Epstein/flights.html)
+135 airports. 138 passengers. Filter by name, date, airport. Click any airport to see who flew through it.
+
 ## Key Numbers
 
 | | |
@@ -82,9 +85,17 @@ python tools/monitor.py --seed
 ```
 ├── .github/workflows/monitor.yml   # Scheduled monitoring action
 ├── banner.svg                      # Auto-generated arrest counter banner
+├── docs/
+│   ├── index.html                  # GitHub Pages main site
+│   └── flights.html                # Interactive flight map (Leaflet.js)
 ├── tools/
 │   ├── monitor.py                  # Main monitoring script
+│   ├── fetch_flights.py            # Flight data fetcher (EpsteinExposed API)
+│   ├── build_flights_page.py       # Flight map HTML generator
 │   └── requirements.txt            # Python dependencies
+├── data/
+│   ├── flights.json                # 1,708 flights (1997-2019)
+│   └── persons.json                # 1,416 persons
 ├── manifests/
 │   ├── dataset-01.csv              # Per-dataset file manifests
 │   ├── ...
