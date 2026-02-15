@@ -1,0 +1,61 @@
+name: Monitor Epstein Files Index
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: 'Run in seed mode (builds initial manifests from scratch)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r tools/requirements.txt
+
+      - name: Run monitor
+        run: |
+          if [ "${{ github.event.inputs.seed }}" = "true" ]; then
+            python tools/monitor.py --seed
+          else
+            python tools/monitor.py
+          fi
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manifests/ CHANGELOG.md
+          DATASETS_CHANGED=$(git diff --cached --name-only manifests/ | grep -c 'dataset-' || true)
+          DATE=$(date -u +%Y-%m-%d)
+          if [ "${{ github.event.inputs.seed }}" = "true" ]; then
+            git commit -m "seed: initial manifest build — ${DATE}"
+          elif [ "$DATASETS_CHANGED" -gt 0 ]; then
+            git commit -m "monitor: changes detected in ${DATASETS_CHANGED} dataset(s) — ${DATE}"
+          else
+            git commit -m "monitor: check completed — ${DATE}"
+          fi
+          git push
