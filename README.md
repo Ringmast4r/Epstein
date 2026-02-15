@@ -42,20 +42,20 @@ No PDFs are stored here — only the manifest/index.
 
 ## The 12 Datasets
 
-| DS | Files | Size | Contents |
-|----|-------|------|----------|
-| 1 | ~3,150 | 1.23 GB | FBI 302s, police reports |
-| 2 | ~600 | 630 MB | FBI 302s, police reports |
-| 3 | ~49+ | 595 MB | FBI 302s, police reports |
-| 4 | ~200 | 351 MB | FBI 302s, police reports |
-| 5 | ~150 | 61 MB | FBI 302s, police reports |
-| 6 | 12 | 51 MB | FBI 302s, police reports |
-| 7 | 16 | 97 MB | FBI 302s, police reports |
-| 8 | ~11,000 | 10.7 GB | FBI 302s, police reports |
-| 9 | 533,786 | ~143 GB | Emails, private correspondence, DOJ internal docs |
-| 10 | 50,403 | 78.6 GB | 180K images + 2K videos from Epstein properties |
-| 11 | 331,655 | 25.5 GB | Flight manifests, financials, seizure records |
-| 12 | ~150 | 114 MB | Late productions, supplemental |
+| DS | Files | Size | Released | Contents |
+|----|-------|------|----------|----------|
+| 1 | ~3,150 | 1.23 GB | Dec 19, 2025 | FBI 302s, police reports |
+| 2 | ~600 | 630 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 3 | ~49+ | 595 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 4 | ~200 | 351 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 5 | ~150 | 61 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 6 | 12 | 51 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 7 | 16 | 97 MB | Dec 19, 2025 | FBI 302s, police reports |
+| 8 | ~11,000 | 10.7 GB | Dec 19, 2025 | FBI 302s, police reports |
+| 9 | 533,786 | ~143 GB | Jan 30, 2026 | Emails, private correspondence, DOJ internal docs |
+| 10 | 50,403 | 78.6 GB | Jan 30, 2026 | 180K images + 2K videos from Epstein properties |
+| 11 | 331,655 | 25.5 GB | Jan 30, 2026 | Flight manifests, financials, seizure records |
+| 12 | ~150 | 114 MB | Dec 19, 2025 | Late productions, supplemental |
 
 ## How It Works
 

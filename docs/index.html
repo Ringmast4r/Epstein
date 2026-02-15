@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epstein Files Monitor — 0 Arrests</title>
+    <meta name="description" content="Tracking 931,000+ DOJ Epstein files. Zero arrests. The counter keeps going.">
+    <meta property="og:title" content="Epstein Files Monitor — 0 Arrests">
+    <meta property="og:description" content="It has been 58+ days since the DOJ released 931,000 files exposing a global trafficking network. Nobody has been arrested.">
+    <meta property="og:type" content="website">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Pulsing red top bar */
+        .pulse-bar {
+            height: 4px;
+            background: #cc0000;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom: 1px solid #1a1a1a;
+            background: radial-gradient(ellipse at center top, #1a0000 0%, #0a0a0a 70%);
+        }
+
+        .exposed {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #cc0000;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .arrest-count {
+            font-size: clamp(80px, 15vw, 160px);
+            font-weight: 900;
+            color: #ff0000;
+            line-height: 1;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.4), 0 0 80px rgba(255, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .arrests-label {
+            font-size: clamp(30px, 6vw, 60px);
+            font-weight: 900;
+            color: #ff0000;
+            letter-spacing: 10px;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .days-label {
+            font-size: 18px;
+            color: #ff6666;
+            margin-bottom: 8px;
+        }
+
+        .days-count {
+            font-size: clamp(40px, 8vw, 72px);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+        .days-count span {
+            color: #ff4444;
+        }
+
+        .days-since {
+            font-size: 16px;
+            color: #ff6666;
+            margin-top: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .nobody {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 35px;
+        }
+
+        .divider {
+            width: 200px;
+            height: 1px;
+            background: #cc0000;
+            margin: 30px auto;
+            opacity: 0.5;
+        }
+
+        .message {
+            font-size: 14px;
+            color: #777;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        .children {
+            max-width: 700px;
+            margin: 30px auto 0;
+            padding: 20px;
+            border: 1px solid #330000;
+            border-radius: 8px;
+            background: rgba(204, 0, 0, 0.05);
+        }
+        .children p {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff9999;
+            line-height: 1.6;
+        }
+
+        /* Stats section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1px;
+            background: #1a1a1a;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .stat {
+            background: #0f0f0f;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ffffff;
+        }
+        .stat-value.red { color: #ff0000; }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 6px;
+        }
+
+        /* Datasets table */
+        .datasets {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+        .datasets h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        .datasets .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #cc0000;
+        }
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        tr:hover td {
+            background: #111;
+        }
+        .ds-num {
+            font-weight: 900;
+            color: #ff4444;
+            font-size: 16px;
+        }
+        .ds-files {
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .ds-size {
+            color: #999;
+        }
+        .ds-date {
+            color: #ff9966;
+            font-size: 13px;
+        }
+        .ds-content {
+            color: #aaa;
+        }
+
+        /* Timeline section */
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+        .timeline h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+        .tl-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .tl-date {
+            min-width: 110px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ff6666;
+            padding-top: 2px;
+        }
+        .tl-text {
+            font-size: 15px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        .tl-text strong {
+            color: #ffffff;
+        }
+
+        /* About section */
+        .about {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+        .about h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .about p {
+            font-size: 15px;
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .about a {
+            color: #ff6666;
+            text-decoration: none;
+        }
+        .about a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 13px;
+            color: #444;
+        }
+        footer a {
+            color: #ff6666;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="pulse-bar"></div>
+
+<section class="hero">
+    <div class="exposed">&#x1F534; Exposed traffickers, enablers, and co-conspirators &#x1F534;</div>
+
+    <div class="arrest-count" id="arrest-count">0</div>
+    <div class="arrests-label">ARRESTS</div>
+
+    <div class="days-label">It has been</div>
+    <div class="days-count"><span id="days-count">—</span> DAYS</div>
+    <div class="days-since">since the DOJ released 931,000+ files exposing a global trafficking network involving billionaires, politicians, and royalty.</div>
+
+    <div class="nobody">Nobody has been arrested. Nobody has been charged. Not one.</div>
+
+    <div class="divider"></div>
+
+    <div class="message">
+        This is not left vs right. This is not political.<br>
+        This is raw evil vs. basic human decency.
+    </div>
+
+    <div class="children">
+        <p>Children were raped by the most powerful people on the planet. The evidence is public. The names are known. The flight logs exist. And every single one of them is still free.</p>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <div class="stat-value">931K+</div>
+        <div class="stat-label">Files Released</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">360 GB</div>
+        <div class="stat-label">Total Size</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Datasets</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value red" id="stat-arrests">0</div>
+        <div class="stat-label">Arrests</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">200+</div>
+        <div class="stat-label">Victims</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">500+</div>
+        <div class="stat-label">Blacked-out Pages</div>
+    </div>
+</section>
+
+<section class="datasets">
+    <h2>The 12 Datasets</h2>
+    <p class="subtitle">~3.5 million pages of evidence. DOJ killed all bulk downloads on Feb 11, 2026.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>DS</th>
+                <th>Files</th>
+                <th>Size</th>
+                <th>Released</th>
+                <th>Contents</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="ds-num">1</td>
+                <td class="ds-files">~3,150</td>
+                <td class="ds-size">1.23 GB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">2</td>
+                <td class="ds-files">~600</td>
+                <td class="ds-size">630 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">3</td>
+                <td class="ds-files">~49+</td>
+                <td class="ds-size">595 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">4</td>
+                <td class="ds-files">~200</td>
+                <td class="ds-size">351 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">5</td>
+                <td class="ds-files">~150</td>
+                <td class="ds-size">61 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">6</td>
+                <td class="ds-files">12</td>
+                <td class="ds-size">51 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">7</td>
+                <td class="ds-files">16</td>
+                <td class="ds-size">97 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">8</td>
+                <td class="ds-files">~11,000</td>
+                <td class="ds-size">10.7 GB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+            </tr>
+            <tr>
+                <td class="ds-num">9</td>
+                <td class="ds-files">533,786</td>
+                <td class="ds-size">~143 GB</td>
+                <td class="ds-date">Jan 30, 2026</td>
+                <td class="ds-content">Emails, private correspondence, DOJ internal docs re: 2008 NPA</td>
+            </tr>
+            <tr>
+                <td class="ds-num">10</td>
+                <td class="ds-files">50,403</td>
+                <td class="ds-size">78.6 GB</td>
+                <td class="ds-date">Jan 30, 2026</td>
+                <td class="ds-content">180K images + 2K videos from Epstein properties</td>
+            </tr>
+            <tr>
+                <td class="ds-num">11</td>
+                <td class="ds-files">331,655</td>
+                <td class="ds-size">25.5 GB</td>
+                <td class="ds-date">Jan 30, 2026</td>
+                <td class="ds-content">Flight manifests, financials, seizure records</td>
+            </tr>
+            <tr>
+                <td class="ds-num">12</td>
+                <td class="ds-files">~150</td>
+                <td class="ds-size">114 MB</td>
+                <td class="ds-date">Dec 19, 2025</td>
+                <td class="ds-content">Late productions, supplemental items</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="timeline">
+    <h2>What They Did</h2>
+
+    <div class="tl-item">
+        <div class="tl-date">Dec 19, 2025</div>
+        <div class="tl-text">DOJ begins releasing records under the Epstein Files Transparency Act. <strong>Over 500 pages entirely blacked out.</strong> DOJ quickly halts, citing need for further review.</div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Jan 30, 2026</div>
+        <div class="tl-text">DOJ releases 3+ million pages, 2,000 videos, 180,000 images. Deputy AG calls this the <strong>"final release."</strong> Total: ~3.5 million pages across 12 datasets.</div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Feb 1, 2026</div>
+        <div class="tl-text">Attorneys for <strong>200+ victims</strong> ask judges to take down the DOJ Epstein website — <em>"the single most egregious violation of victim privacy in one day in United States history."</em> DOJ had published unredacted victim names and nude images of young women.</div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Feb 10, 2026</div>
+        <div class="tl-text">Rep. Ro Khanna reads <strong>6 names</strong> from unredacted files on the House floor — people he says are <em>"likely incriminated."</em> Deputy AG Blanche calls them <em>"completely random people."</em></div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Feb 11, 2026</div>
+        <div class="tl-text"><strong>DOJ removes all bulk download links.</strong> 931,000 files now accessible only one PDF at a time. No ZIP files. No API. No sitemap.</div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Feb 12, 2026</div>
+        <div class="tl-text">Goldman Sachs CLO <strong>Kathryn Ruemmler</strong> announces resignation after files reveal she was one of three people Epstein called after his 2019 arrest. People are running. Nobody is chasing.</div>
+    </div>
+    <div class="tl-item">
+        <div class="tl-date">Feb 14, 2026</div>
+        <div class="tl-text">NPR reports Epstein files are <strong>taking down elite figures in Europe</strong> while the U.S. reckoning remains muted.</div>
+    </div>
+</section>
+
+<section class="about">
+    <h2>What This Site Tracks</h2>
+    <p>A GitHub Action monitors the DOJ Epstein Files index <strong>every 6 hours</strong>. It checks every dataset for new files, removed files, and changes. Everything is logged. Nothing disappears without a record.</p>
+    <p>No PDFs are stored — only the index. The manifests, changelog, and all source code are open on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
+
+    <h2 style="margin-top: 40px;">Sources</h2>
+    <p>
+        <a href="https://www.justice.gov/epstein">DOJ Epstein Library</a><br>
+        <a href="https://www.congress.gov/bill/119th-congress/house-bill/4405">Epstein Files Transparency Act (PL 119-38)</a><br>
+        <a href="https://www.pbs.org/newshour/politics/a-timeline-of-the-jeffrey-epstein-investigation-and-the-fight-to-make-the-governments-files-public">PBS Timeline</a><br>
+        <a href="https://www.npr.org/2026/02/14/nx-s1-5714609/epstein-europe-fallout">NPR: Epstein Europe Fallout</a><br>
+        <a href="https://github.com/Surebob/epstein-files-downloader">Community Downloads: Surebob/epstein-files-downloader</a><br>
+        <a href="https://github.com/yung-megafone/Epstein-Files">Community Archive: yung-megafone/Epstein-Files</a>
+    </p>
+</section>
+
+<footer>
+    <p>This counter updates automatically. Source on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
+    <p style="margin-top: 8px;">The number goes up every day until someone is in handcuffs.</p>
+</footer>
+
+<div class="pulse-bar"></div>
+
+<script>
+    // Calculate days since first DOJ release (Dec 19, 2025)
+    const dropDate = new Date('2025-12-19T00:00:00Z');
+    const now = new Date();
+    const days = Math.floor((now - dropDate) / (1000 * 60 * 60 * 24));
+
+    document.getElementById('days-count').textContent = days;
+    document.title = `Epstein Files Monitor — 0 Arrests, ${days} Days`;
+
+    // Update OG description dynamically won't work, but title does
+    // The days counter is live — always accurate in the browser
+</script>
+
+</body>
+</html>

@@ -1,5 +1,66 @@
 {
-  "datasets": {},
-  "last_check": null,
-  "last_change": null
+  "datasets": {
+    "1": {
+      "file_count": 50,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "2": {
+      "file_count": 49,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "3": {
+      "file_count": 49,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "4": {
+      "file_count": 49,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "5": {
+      "file_count": 49,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "6": {
+      "file_count": 12,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "7": {
+      "file_count": 17,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "8": {
+      "file_count": 49,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "9": {
+      "file_count": 2033,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "10": {
+      "file_count": 50,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "11": {
+      "file_count": 50,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    },
+    "12": {
+      "file_count": 50,
+      "last_check": "2026-02-15T07:26:45Z",
+      "last_change": "2026-02-15T07:24:21Z"
+    }
+  },
+  "last_check": "2026-02-15T07:26:45Z",
+  "last_change": "2026-02-15T07:24:21Z"
 }

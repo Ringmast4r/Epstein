@@ -238,10 +238,11 @@ def extract_pdf_links(html, ds_num):
     links = []
     pattern = re.compile(rf"/epstein/files/DataSet%20{ds_num}/EFTA(\d{{8}})\.pdf", re.IGNORECASE)
     for a in soup.find_all("a", href=True):
-        m = pattern.search(a["href"])
+        href = a["href"]
+        m = pattern.search(href)
         if m:
             efta_num = m.group(1)
-            url = f"{DOJ_BASE}{a['href']}"
+            url = href if href.startswith("http") else f"{DOJ_BASE}{href}"
             links.append((efta_num, url))
     return links
 
