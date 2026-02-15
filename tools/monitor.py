@@ -31,6 +31,7 @@ CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
 SUMMARY_PATH = MANIFESTS_DIR / "summary.json"
 README_PATH = REPO_ROOT / "README.md"
 BANNER_PATH = REPO_ROOT / "banner.svg"
+HTML_PATH = REPO_ROOT / "docs" / "index.html"
 
 DATA_DROP_DATE = datetime(2025, 12, 19, tzinfo=timezone.utc)  # First DOJ release
 
@@ -228,6 +229,31 @@ def generate_banner(days):
   <rect x="4" y="420" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
 </svg>'''
     BANNER_PATH.write_text(svg, encoding="utf-8")
+
+
+def update_html():
+    """Update file counts in the GitHub Pages HTML."""
+    if not HTML_PATH.exists():
+        return
+    summary = load_summary()
+    content = HTML_PATH.read_text(encoding="utf-8")
+
+    # Update total indexed count in stats section
+    total = sum(d["file_count"] for d in summary.get("datasets", {}).values())
+    content = re.sub(
+        r'(<div class="stat-value">)[\d,]+(</div>\s*<div class="stat-label">Files Indexed)',
+        lambda m: f'{m.group(1)}{total:,}{m.group(2)}',
+        content,
+    )
+
+    # Update per-dataset file counts in table
+    for ds_str, ds_data in summary.get("datasets", {}).items():
+        count = ds_data["file_count"]
+        # Match: <td class="ds-files">NUMBER</td> in the row for this dataset
+        pattern = rf'(<td class="ds-num">{ds_str}</td>\s*<td class="ds-files">)[\d,]+(</td>)'
+        content = re.sub(pattern, lambda m: f'{m.group(1)}{count:,}{m.group(2)}', content)
+
+    HTML_PATH.write_text(content, encoding="utf-8")
 
 
 # --- Scraping DOJ ---
@@ -472,6 +498,7 @@ def run_seed():
 
     update_summary()
     update_readme()
+    update_html()
     if all_changelog:
         all_changelog.insert(0, "**Initial seed** — built manifests from DOJ pages and community sources")
         append_changelog(all_changelog)
@@ -603,6 +630,7 @@ def run_monitor():
 
     update_summary()
     update_readme()
+    update_html()
     if changelog:
         append_changelog(changelog)
         print("\nChanges detected — changelog updated.")

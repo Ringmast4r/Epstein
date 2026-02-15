@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epstein Files Monitor — 0 Arrests</title>
-    <meta name="description" content="Tracking 931,000+ DOJ Epstein files. Zero arrests. The counter keeps going.">
+    <meta name="description" content="Tracking 1,380,946 DOJ Epstein files. Zero arrests. The counter keeps going.">
     <meta property="og:title" content="Epstein Files Monitor — 0 Arrests">
     <meta property="og:description" content="It has been 58+ days since the DOJ released 931,000 files exposing a global trafficking network. Nobody has been arrested.">
     <meta property="og:type" content="website">
@@ -12,12 +12,15 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0a0a0a;
-            color: #e0e0e0;
+            background: #ffffff;
+            color: #1a1a1a;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        a { color: #cc0000; text-decoration: none; }
+        a:hover { text-decoration: underline; }
 
         /* Pulsing red top bar */
         .pulse-bar {
@@ -77,9 +80,7 @@
             color: #ffffff;
             line-height: 1.1;
         }
-        .days-count span {
-            color: #ff4444;
-        }
+        .days-count span { color: #ff4444; }
 
         .days-since {
             font-size: 16px;
@@ -108,7 +109,7 @@
 
         .message {
             font-size: 14px;
-            color: #777;
+            color: #ccc;
             font-style: italic;
             line-height: 1.8;
         }
@@ -117,14 +118,14 @@
             max-width: 700px;
             margin: 30px auto 0;
             padding: 20px;
-            border: 1px solid #330000;
+            border: 1px solid #550000;
             border-radius: 8px;
-            background: rgba(204, 0, 0, 0.05);
+            background: rgba(204, 0, 0, 0.1);
         }
         .children p {
             font-size: 16px;
             font-weight: 700;
-            color: #ff9999;
+            color: #ffaaaa;
             line-height: 1.6;
         }
 
@@ -133,22 +134,22 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1px;
-            background: #1a1a1a;
+            background: #e0e0e0;
             max-width: 1000px;
             margin: 0 auto;
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 1px solid #e0e0e0;
         }
         .stat {
-            background: #0f0f0f;
+            background: #f5f5f5;
             padding: 30px 20px;
             text-align: center;
         }
         .stat-value {
             font-size: 28px;
             font-weight: 900;
-            color: #ffffff;
+            color: #1a1a1a;
         }
-        .stat-value.red { color: #ff0000; }
+        .stat-value.red { color: #990000; font-size: 32px; }
         .stat-label {
             font-size: 12px;
             color: #666;
@@ -157,21 +158,24 @@
             margin-top: 6px;
         }
 
+        /* Section shared */
+        .section-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .section-subtitle {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
         /* Datasets table */
         .datasets {
             max-width: 1100px;
             margin: 0 auto;
             padding: 50px 20px;
-        }
-        .datasets h2 {
-            font-size: 24px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-        .datasets .subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 30px;
         }
 
         table {
@@ -183,7 +187,7 @@
             padding: 12px 16px;
             font-size: 11px;
             font-weight: 700;
-            color: #666;
+            color: #888;
             text-transform: uppercase;
             letter-spacing: 2px;
             border-bottom: 2px solid #cc0000;
@@ -191,103 +195,157 @@
         td {
             padding: 14px 16px;
             font-size: 14px;
-            border-bottom: 1px solid #1a1a1a;
+            color: #1a1a1a;
+            border-bottom: 1px solid #e8e8e8;
         }
-        tr:hover td {
-            background: #111;
-        }
+        tr:hover td { background: #fafafa; }
         .ds-num {
             font-weight: 900;
-            color: #ff4444;
-            font-size: 16px;
+            color: #990000;
+            font-size: 18px;
         }
-        .ds-files {
+        .ds-files { font-weight: 700; }
+        .ds-date { color: #8a4500; }
+        .ds-dl a {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #fff0f0;
+            border: 1px solid #cc0000;
+            border-radius: 4px;
+            color: #cc0000;
+            font-size: 12px;
             font-weight: 700;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .ds-dl a:hover {
+            background: #cc0000;
             color: #ffffff;
+            text-decoration: none;
         }
-        .ds-size {
-            color: #999;
+
+        /* Download all banner */
+        .download-all {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
         }
-        .ds-date {
-            color: #ff9966;
-            font-size: 13px;
+        .download-all-box {
+            background: #fff5f5;
+            border: 2px solid #cc0000;
+            border-radius: 10px;
+            padding: 30px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
-        .ds-content {
-            color: #aaa;
+        .download-all-left h3 {
+            font-size: 22px;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        .download-all-left p {
+            font-size: 14px;
+            color: #555;
+        }
+        .download-all-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #cc0000;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 900;
+            border-radius: 6px;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: background 0.15s;
+        }
+        .download-all-btn:hover {
+            background: #ff0000;
+            text-decoration: none;
+        }
+        .download-instructions {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
+        }
+        .download-instructions pre {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px 24px;
+            color: #1a1a1a;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+        .download-instructions pre .comment { color: #888; }
+        .download-instructions pre .cmd { color: #cc0000; }
+        .download-instructions h3 {
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-bottom: 14px;
         }
 
         /* Timeline section */
         .timeline {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 50px 20px;
-            border-top: 1px solid #1a1a1a;
-        }
-        .timeline h2 {
-            font-size: 24px;
-            color: #ffffff;
-            margin-bottom: 30px;
+            border-top: 1px solid #e0e0e0;
         }
         .tl-item {
             display: flex;
             gap: 20px;
             margin-bottom: 24px;
             padding-bottom: 24px;
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 1px solid #e8e8e8;
         }
         .tl-date {
-            min-width: 110px;
-            font-size: 13px;
+            min-width: 120px;
+            font-size: 14px;
             font-weight: 700;
-            color: #ff6666;
+            color: #990000;
             padding-top: 2px;
         }
         .tl-text {
             font-size: 15px;
-            color: #ccc;
-            line-height: 1.6;
+            color: #333;
+            line-height: 1.7;
         }
-        .tl-text strong {
-            color: #ffffff;
-        }
+        .tl-text strong { color: #1a1a1a; }
+        .tl-text em { color: #555; }
 
         /* About section */
         .about {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 50px 20px;
-            border-top: 1px solid #1a1a1a;
+            border-top: 1px solid #e0e0e0;
         }
         .about h2 {
             font-size: 24px;
-            color: #ffffff;
+            color: #1a1a1a;
             margin-bottom: 20px;
         }
         .about p {
             font-size: 15px;
-            color: #aaa;
+            color: #333;
             line-height: 1.7;
             margin-bottom: 16px;
-        }
-        .about a {
-            color: #ff6666;
-            text-decoration: none;
-        }
-        .about a:hover {
-            text-decoration: underline;
         }
 
         /* Footer */
         footer {
             text-align: center;
             padding: 40px 20px;
-            border-top: 1px solid #1a1a1a;
+            border-top: 1px solid #e0e0e0;
             font-size: 13px;
-            color: #444;
-        }
-        footer a {
-            color: #ff6666;
-            text-decoration: none;
+            color: #888;
         }
     </style>
 </head>
@@ -298,11 +356,11 @@
 <section class="hero">
     <div class="exposed">&#x1F534; Exposed traffickers, enablers, and co-conspirators &#x1F534;</div>
 
-    <div class="arrest-count" id="arrest-count">0</div>
+    <div class="arrest-count">0</div>
     <div class="arrests-label">ARRESTS</div>
 
     <div class="days-label">It has been</div>
-    <div class="days-count"><span id="days-count">—</span> DAYS</div>
+    <div class="days-count"><span id="days-count">&mdash;</span> DAYS</div>
     <div class="days-since">since the DOJ released 931,000+ files exposing a global trafficking network involving billionaires, politicians, and royalty.</div>
 
     <div class="nobody">Nobody has been arrested. Nobody has been charged. Not one.</div>
@@ -321,11 +379,11 @@
 
 <section class="stats">
     <div class="stat">
-        <div class="stat-value">931K+</div>
-        <div class="stat-label">Files Released</div>
+        <div class="stat-value">1,380,946</div>
+        <div class="stat-label">Files Indexed</div>
     </div>
     <div class="stat">
-        <div class="stat-value">360 GB</div>
+        <div class="stat-value">360+ GB</div>
         <div class="stat-label">Total Size</div>
     </div>
     <div class="stat">
@@ -333,7 +391,7 @@
         <div class="stat-label">Datasets</div>
     </div>
     <div class="stat">
-        <div class="stat-value red" id="stat-arrests">0</div>
+        <div class="stat-value red">0</div>
         <div class="stat-label">Arrests</div>
     </div>
     <div class="stat">
@@ -347,8 +405,8 @@
 </section>
 
 <section class="datasets">
-    <h2>The 12 Datasets</h2>
-    <p class="subtitle">~3.5 million pages of evidence. DOJ killed all bulk downloads on Feb 11, 2026.</p>
+    <h2 class="section-title">The 12 Datasets</h2>
+    <p class="section-subtitle">~3.5 million pages of evidence. DOJ killed all bulk downloads on Feb 11, 2026. We indexed every PDF link.</p>
 
     <table>
         <thead>
@@ -358,119 +416,162 @@
                 <th>Size</th>
                 <th>Released</th>
                 <th>Contents</th>
+                <th>URLs</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td class="ds-num">1</td>
-                <td class="ds-files">~3,150</td>
-                <td class="ds-size">1.23 GB</td>
+                <td class="ds-files">3,158</td>
+                <td>1.23 GB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-01-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">2</td>
-                <td class="ds-files">~600</td>
-                <td class="ds-size">630 MB</td>
+                <td class="ds-files">574</td>
+                <td>630 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-02-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">3</td>
-                <td class="ds-files">~49+</td>
-                <td class="ds-size">595 MB</td>
+                <td class="ds-files">67</td>
+                <td>595 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-03-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">4</td>
-                <td class="ds-files">~200</td>
-                <td class="ds-size">351 MB</td>
+                <td class="ds-files">152</td>
+                <td>351 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-04-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">5</td>
-                <td class="ds-files">~150</td>
-                <td class="ds-size">61 MB</td>
+                <td class="ds-files">120</td>
+                <td>61 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-05-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">6</td>
-                <td class="ds-files">12</td>
-                <td class="ds-size">51 MB</td>
+                <td class="ds-files">13</td>
+                <td>51 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-06-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">7</td>
-                <td class="ds-files">16</td>
-                <td class="ds-size">97 MB</td>
+                <td class="ds-files">17</td>
+                <td>97 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-07-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">8</td>
-                <td class="ds-files">~11,000</td>
-                <td class="ds-size">10.7 GB</td>
+                <td class="ds-files">10,595</td>
+                <td>10.7 GB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">FBI 302s, police reports (2005-2008)</td>
+                <td>FBI 302s, police reports (2005-2008)</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-08-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">9</td>
-                <td class="ds-files">533,786</td>
-                <td class="ds-size">~143 GB</td>
+                <td class="ds-files">531,285</td>
+                <td>~143 GB</td>
                 <td class="ds-date">Jan 30, 2026</td>
-                <td class="ds-content">Emails, private correspondence, DOJ internal docs re: 2008 NPA</td>
+                <td>Emails, private correspondence, DOJ internal docs re: 2008 NPA</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-09-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">10</td>
-                <td class="ds-files">50,403</td>
-                <td class="ds-size">78.6 GB</td>
+                <td class="ds-files">503,154</td>
+                <td>78.6 GB</td>
                 <td class="ds-date">Jan 30, 2026</td>
-                <td class="ds-content">180K images + 2K videos from Epstein properties</td>
+                <td>180K images + 2K videos from Epstein properties</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-10-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">11</td>
-                <td class="ds-files">331,655</td>
-                <td class="ds-size">25.5 GB</td>
+                <td class="ds-files">331,659</td>
+                <td>25.5 GB</td>
                 <td class="ds-date">Jan 30, 2026</td>
-                <td class="ds-content">Flight manifests, financials, seizure records</td>
+                <td>Flight manifests, financials, seizure records</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-11-urls.txt" download>Download</a></td>
             </tr>
             <tr>
                 <td class="ds-num">12</td>
-                <td class="ds-files">~150</td>
-                <td class="ds-size">114 MB</td>
+                <td class="ds-files">152</td>
+                <td>114 MB</td>
                 <td class="ds-date">Dec 19, 2025</td>
-                <td class="ds-content">Late productions, supplemental items</td>
+                <td>Late productions, supplemental items</td>
+                <td class="ds-dl"><a href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/dataset-12-urls.txt" download>Download</a></td>
             </tr>
         </tbody>
     </table>
 </section>
 
+<section class="download-all">
+    <div class="download-all-box">
+        <div class="download-all-left">
+            <h3>All 1,380,946 PDF Links</h3>
+            <p>One URL per line. Feed it to aria2c, wget, or curl. Every file the DOJ released.</p>
+        </div>
+        <a class="download-all-btn" href="https://raw.githubusercontent.com/Ringmast4r/Epstein/master/manifests/urls/all-urls.txt" download>DOWNLOAD ALL URLS</a>
+    </div>
+</section>
+
+<section class="download-instructions">
+    <h3>How to Download the Actual PDFs</h3>
+    <pre><span class="comment"># Download all 1.38M PDFs (~360 GB) using aria2c</span>
+<span class="cmd">aria2c</span> -i all-urls.txt -j 10 -x 10 -d epstein-files/
+
+<span class="comment"># Or just one dataset at a time</span>
+<span class="cmd">aria2c</span> -i dataset-09-urls.txt -j 10 -x 10 -d dataset-09/
+
+<span class="comment"># Or use wget</span>
+<span class="cmd">wget</span> -i all-urls.txt -P epstein-files/ --no-clobber
+
+<span class="comment"># Or use curl with parallel downloads</span>
+<span class="cmd">xargs</span> -n 1 -P 10 curl -O &lt; all-urls.txt</pre>
+</section>
+
 <section class="timeline">
-    <h2>What They Did</h2>
+    <h2 class="section-title">What They Did</h2>
+    <p class="section-subtitle" style="margin-bottom:30px;">A timeline of obstruction disguised as transparency.</p>
 
     <div class="tl-item">
+        <div class="tl-date">Nov 19, 2025</div>
+        <div class="tl-text">Trump signs the <strong>Epstein Files Transparency Act</strong> into law (PL 119-38). House passed it 427-1. Senate unanimous. DOJ has 30 days to release everything.</div>
+    </div>
+    <div class="tl-item">
         <div class="tl-date">Dec 19, 2025</div>
-        <div class="tl-text">DOJ begins releasing records under the Epstein Files Transparency Act. <strong>Over 500 pages entirely blacked out.</strong> DOJ quickly halts, citing need for further review.</div>
+        <div class="tl-text">DOJ begins releasing records. <strong>Over 500 pages entirely blacked out.</strong> Datasets 1-8 and 12 published. DOJ quickly halts, citing need for further review. Bipartisan condemnation.</div>
     </div>
     <div class="tl-item">
         <div class="tl-date">Jan 30, 2026</div>
-        <div class="tl-text">DOJ releases 3+ million pages, 2,000 videos, 180,000 images. Deputy AG calls this the <strong>"final release."</strong> Total: ~3.5 million pages across 12 datasets.</div>
+        <div class="tl-text">DOJ drops the major dump: <strong>3+ million pages, 2,000 videos, 180,000 images.</strong> Datasets 9, 10, 11 published. Deputy AG calls this the "final release." Total: ~3.5 million pages.</div>
     </div>
     <div class="tl-item">
         <div class="tl-date">Feb 1, 2026</div>
-        <div class="tl-text">Attorneys for <strong>200+ victims</strong> ask judges to take down the DOJ Epstein website — <em>"the single most egregious violation of victim privacy in one day in United States history."</em> DOJ had published unredacted victim names and nude images of young women.</div>
+        <div class="tl-text">Attorneys for <strong>200+ victims</strong> ask judges to take down the DOJ Epstein website &mdash; <em>"the single most egregious violation of victim privacy in one day in United States history."</em> DOJ had published unredacted victim names and nude images of young women.</div>
     </div>
     <div class="tl-item">
         <div class="tl-date">Feb 10, 2026</div>
-        <div class="tl-text">Rep. Ro Khanna reads <strong>6 names</strong> from unredacted files on the House floor — people he says are <em>"likely incriminated."</em> Deputy AG Blanche calls them <em>"completely random people."</em></div>
+        <div class="tl-text">Rep. Ro Khanna reads <strong>6 names</strong> from unredacted files on the House floor &mdash; people he says are <em>"likely incriminated."</em> Includes billionaire <strong>Leslie Wexner</strong>, labeled an FBI co-conspirator in 2019. Deputy AG Blanche calls them <em>"completely random people."</em></div>
     </div>
     <div class="tl-item">
         <div class="tl-date">Feb 11, 2026</div>
-        <div class="tl-text"><strong>DOJ removes all bulk download links.</strong> 931,000 files now accessible only one PDF at a time. No ZIP files. No API. No sitemap.</div>
+        <div class="tl-text"><strong>DOJ removes all bulk download links.</strong> 931,000+ files now accessible only one PDF at a time. No ZIP files. No API. No sitemap. The DOJ actively obstructing access to files they were legally required to release.</div>
     </div>
     <div class="tl-item">
         <div class="tl-date">Feb 12, 2026</div>
@@ -478,14 +579,15 @@
     </div>
     <div class="tl-item">
         <div class="tl-date">Feb 14, 2026</div>
-        <div class="tl-text">NPR reports Epstein files are <strong>taking down elite figures in Europe</strong> while the U.S. reckoning remains muted.</div>
+        <div class="tl-text">NPR reports Epstein files are <strong>taking down elite figures in Europe</strong> while the U.S. reckoning remains muted. Prince Andrew stripped of titles. Resignations across the continent. America: silence.</div>
     </div>
 </section>
 
 <section class="about">
     <h2>What This Site Tracks</h2>
     <p>A GitHub Action monitors the DOJ Epstein Files index <strong>every 6 hours</strong>. It checks every dataset for new files, removed files, and changes. Everything is logged. Nothing disappears without a record.</p>
-    <p>No PDFs are stored — only the index. The manifests, changelog, and all source code are open on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
+    <p>We have indexed <strong>1,380,946 direct PDF links</strong> across all 12 datasets. Every URL points straight to the DOJ server. If they remove a single file, we'll know.</p>
+    <p>No PDFs are stored here &mdash; only the index. The manifests, changelog, and all source code are open on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
 
     <h2 style="margin-top: 40px;">Sources</h2>
     <p>
@@ -493,8 +595,9 @@
         <a href="https://www.congress.gov/bill/119th-congress/house-bill/4405">Epstein Files Transparency Act (PL 119-38)</a><br>
         <a href="https://www.pbs.org/newshour/politics/a-timeline-of-the-jeffrey-epstein-investigation-and-the-fight-to-make-the-governments-files-public">PBS Timeline</a><br>
         <a href="https://www.npr.org/2026/02/14/nx-s1-5714609/epstein-europe-fallout">NPR: Epstein Europe Fallout</a><br>
-        <a href="https://github.com/Surebob/epstein-files-downloader">Community Downloads: Surebob/epstein-files-downloader</a><br>
-        <a href="https://github.com/yung-megafone/Epstein-Files">Community Archive: yung-megafone/Epstein-Files</a>
+        <a href="https://github.com/niemasd/Epstein-Files">niemasd/Epstein-Files (URL source)</a><br>
+        <a href="https://github.com/Surebob/epstein-files-downloader">Surebob/epstein-files-downloader</a><br>
+        <a href="https://github.com/yung-megafone/Epstein-Files">yung-megafone/Epstein-Files</a>
     </p>
 </section>
 
@@ -506,16 +609,11 @@
 <div class="pulse-bar"></div>
 
 <script>
-    // Calculate days since first DOJ release (Dec 19, 2025)
     const dropDate = new Date('2025-12-19T00:00:00Z');
     const now = new Date();
     const days = Math.floor((now - dropDate) / (1000 * 60 * 60 * 24));
-
     document.getElementById('days-count').textContent = days;
     document.title = `Epstein Files Monitor — 0 Arrests, ${days} Days`;
-
-    // Update OG description dynamically won't work, but title does
-    // The days counter is live — always accurate in the browser
 </script>
 
 </body>
