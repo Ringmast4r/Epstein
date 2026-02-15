@@ -423,7 +423,7 @@ function renderCards(filter, catFilter) {
             ? '<div class="card-flights"><strong>' + p.flightCount + '</strong> flights</div>'
             : '';
 
-        html += '<div class="person-card" onclick="navigateTo('' + p.slug + '')">'
+        html += '<div class="person-card" onclick="navigateTo(\'' + p.slug + '\')">'
             + '<div class="card-name">' + escHtml(p.name) + '</div>'
             + '<span class="card-badge" style="background:' + catColor + '">' + escHtml(p.category) + '</span>'
             + flightBadge
