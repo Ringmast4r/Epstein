@@ -6,8 +6,13 @@ Reads data/flights.json and embeds it into a self-contained HTML file.
 
 import json
 import re
+import sys
 from pathlib import Path
 from collections import Counter
+
+# Add tools/ to path for build_utils import
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_utils import get_nav_html, NAV_CSS
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 FLIGHTS_JSON = REPO_ROOT / "data" / "flights.json"
@@ -317,12 +322,14 @@ def main():
     passengers_json = json.dumps(top_passengers)
     airport_stats_json = json.dumps(airport_stats_js)
 
-    html = build_html(flights_json, airports_json, passengers_json, airport_stats_json, len(flights), len(passenger_counts))
+    nav_html = get_nav_html("flights")
+    nav_css = NAV_CSS
+    html = build_html(flights_json, airports_json, passengers_json, airport_stats_json, len(flights), len(passenger_counts), nav_html, nav_css)
     OUTPUT.write_text(html, encoding="utf-8")
     print(f"Built {OUTPUT} ({len(flights)} flights)")
 
 
-def build_html(flights_json, airports_json, passengers_json, airport_stats_json, total_flights, total_passengers):
+def build_html(flights_json, airports_json, passengers_json, airport_stats_json, total_flights, total_passengers, nav_html, nav_css):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -411,7 +418,7 @@ def build_html(flights_json, airports_json, passengers_json, airport_stats_json,
 
         .main {{
             display: flex;
-            height: calc(100vh - 110px);
+            height: calc(100vh - 145px);
         }}
 
         #map {{
@@ -504,9 +511,11 @@ def build_html(flights_json, airports_json, passengers_json, airport_stats_json,
             margin-left: 12px;
         }}
 
+        {nav_css}
+
         @media (max-width: 768px) {{
             .sidebar {{ display: none; }}
-            .main {{ height: calc(100vh - 140px); }}
+            .main {{ height: calc(100vh - 170px); }}
             .header {{ padding: 10px 12px; }}
             .header h1 {{ font-size: 16px; }}
             .controls {{ padding: 8px 12px; gap: 8px; }}
@@ -525,6 +534,8 @@ def build_html(flights_json, airports_json, passengers_json, airport_stats_json,
     </div>
     <a class="header-back" href="index.html">&larr; Back to Index</a>
 </div>
+
+{nav_html}
 
 <div class="controls">
     <label>Passenger</label>

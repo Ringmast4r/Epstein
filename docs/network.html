@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epstein Passenger Network</title>
+    <meta name="description" content="Interactive force-directed network graph of Epstein flight passenger co-travel relationships. 138 individuals, 498 connections.">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; overflow: hidden; }
+
+        
+.nav-bar {
+    background: #111;
+    padding: 0 20px;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #222;
+    overflow-x: auto;
+}
+.nav-link {
+    color: #888;
+    text-decoration: none;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s;
+}
+.nav-link:hover { color: #fff; text-decoration: none; }
+.nav-link.active { color: #cc0000; border-bottom-color: #cc0000; }
+.nav-back { margin-left: auto; color: #cc0000; }
+
+
+        .header {
+            background: #0a0a0a;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #cc0000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+        }
+        .header h1 span { color: #cc0000; }
+        .header-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+        .header-stats strong { color: #fff; }
+
+        .controls {
+            background: #111;
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #222;
+        }
+        .controls label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .controls input[type="text"] {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            min-width: 200px;
+        }
+        .controls button {
+            background: #cc0000;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .controls button:hover { background: #ff0000; }
+        .controls button.btn-secondary {
+            background: #333;
+        }
+        .controls button.btn-secondary:hover {
+            background: #555;
+        }
+        .cat-filters {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .cat-filter-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .cat-filter-item input[type="checkbox"] {
+            accent-color: #cc0000;
+        }
+
+        .main {
+            display: flex;
+            height: calc(100vh - 150px);
+        }
+
+        .graph-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .graph-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: #111;
+            overflow-y: auto;
+            border-left: 1px solid #222;
+        }
+        .sidebar-title {
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            background: #0a0a0a;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid #1a1a1a;
+            cursor: pointer;
+            font-size: 13px;
+            gap: 8px;
+        }
+        .sidebar-item:hover { background: #1a1a1a; }
+        .sidebar-item.active { background: #1a0000; border-left: 3px solid #cc0000; }
+        .sidebar-rank {
+            color: #555;
+            font-weight: 700;
+            font-size: 11px;
+            min-width: 24px;
+        }
+        .sidebar-name { color: #fff; flex: 1; }
+        .sidebar-count {
+            color: #cc0000;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* Node click popup */
+        .node-popup {
+            position: absolute;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 16px;
+            min-width: 260px;
+            max-width: 320px;
+            z-index: 100;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            pointer-events: auto;
+        }
+        .node-popup .popup-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .node-popup .popup-close:hover { color: #fff; }
+        .node-popup .popup-name {
+            font-size: 16px;
+            font-weight: 900;
+            color: #cc0000;
+            margin-bottom: 6px;
+            padding-right: 24px;
+        }
+        .node-popup .popup-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .node-popup .popup-flights {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .node-popup .popup-flights strong { color: #fff; }
+        .node-popup .popup-conn-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .node-popup .popup-conn-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .node-popup .popup-conn-count {
+            color: #cc0000;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .node-popup .popup-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #cc0000;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .node-popup .popup-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { height: calc(100vh - 180px); }
+            .header { padding: 10px 12px; }
+            .header h1 { font-size: 16px; }
+            .controls { padding: 8px 12px; gap: 8px; }
+            .controls input[type="text"] { min-width: 140px; }
+            .cat-filters { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav-bar"><a href="flights.html" class="nav-link">Flights</a><a href="network.html" class="nav-link active">Network</a><a href="person.html" class="nav-link">People</a><a href="properties.html" class="nav-link">Properties</a><a href="routes.html" class="nav-link">Routes</a><a href="index.html" class="nav-link nav-back">&larr; Index</a></nav>
+
+<div class="header">
+    <h1><span>&#x1F578;</span> Passenger Network</h1>
+    <div class="header-stats">
+        <span><strong>138</strong> individuals</span>
+        <span><strong>498</strong> connections</span>
+    </div>
+</div>
+
+<div class="controls">
+    <label>Search</label>
+    <input type="text" id="searchInput" placeholder="Type a name...">
+    <button class="btn-secondary" id="resetBtn">Reset</button>
+    <div class="cat-filters" id="catFilters"></div>
+</div>
+
+<div class="main">
+    <div class="graph-container" id="graphContainer">
+        <svg id="networkSvg"></svg>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-title">Most Connected</div>
+        <div id="sidebarList"></div>
+    </div>
+</div>
+
+<script>
+const NODES = [{"id": "Jeffrey Epstein", "flightCount": 553, "category": "other", "slug": "jeffrey-epstein"}, {"id": "Woody Allen", "flightCount": 9, "category": "celebrity", "slug": "woody-allen"}, {"id": "Soon Yi Previn", "flightCount": 8, "category": "other", "slug": "soon-yi-previn"}, {"id": "Redacted", "flightCount": 9, "category": "other", "slug": ""}, {"id": "1 Nanny", "flightCount": 1, "category": "other", "slug": ""}, {"id": "1 Passenger", "flightCount": 2, "category": "other", "slug": ""}, {"id": "Bd", "flightCount": 4, "category": "other", "slug": ""}, {"id": "Billy Dimauro", "flightCount": 2, "category": "associate", "slug": "billy-dimauro"}, {"id": "Larry Visoski", "flightCount": 280, "category": "associate", "slug": "larry-visoski"}, {"id": "Darren Rothell", "flightCount": 1, "category": "other", "slug": ""}, {"id": "1 Female Friend", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Bill Gates", "flightCount": 1, "category": "business", "slug": "bill-gates"}, {"id": "Pilot: Lv", "flightCount": 2, "category": "other", "slug": ""}, {"id": "Mrs Allen (soon Yi Previn)", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Larry Summers", "flightCount": 5, "category": "politician", "slug": "larry-summers"}, {"id": "Darren Indyke Pilots: Lv", "flightCount": 3, "category": "other", "slug": ""}, {"id": "Nadia Marcinkova", "flightCount": 139, "category": "associate", "slug": "nadia-marcinkova"}, {"id": "Ch", "flightCount": 4, "category": "other", "slug": ""}, {"id": "Lasham To Stansted", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Jim Barickoske", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Redacted Pilots: Lv", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Jb", "flightCount": 3, "category": "other", "slug": ""}, {"id": "Lesley Groff", "flightCount": 92, "category": "associate", "slug": "lesley-groff"}, {"id": "John Roberts", "flightCount": 2, "category": "other", "slug": ""}, {"id": "Lv Lm", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Darren Indyke", "flightCount": 15, "category": "associate", "slug": "darren-indyke"}, {"id": "Igor Zinoviev", "flightCount": 19, "category": "associate", "slug": "igor-zinoviev"}, {"id": "Doug Shoettle", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Nick Pilots: Lv", "flightCount": 1, "category": "other", "slug": ""}, {"id": "David Rodgers", "flightCount": 1, "category": "associate", "slug": "david-rodgers"}, {"id": "Empty", "flightCount": 2, "category": "other", "slug": ""}, {"id": "Diverted To Alternate", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Nadia Marcinkova Flew In The Right Seat", "flightCount": 1, "category": "other", "slug": ""}, {"id": "I Sat On Jumpseat", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Bill Hammond", "flightCount": 44, "category": "associate", "slug": "bill-hammond"}, {"id": "Pilots: Lv", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Nvh", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Lv/bh", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Lv Bh", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Lw", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Clare Watts", "flightCount": 17, "category": "associate", "slug": "clare-watts"}, {"id": "Larry Visoski (p)", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Catherine Derby", "flightCount": 2, "category": "associate", "slug": "catherine-derby"}, {"id": "Jennifer Kalin", "flightCount": 10, "category": "associate", "slug": "jennifer-kalin"}, {"id": "Andrew Fargus", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Jr", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Sarah Kellen", "flightCount": 364, "category": "associate", "slug": "sarah-kellen"}, {"id": "Lana Catterton", "flightCount": 8, "category": "associate", "slug": "lana-catterton"}, {"id": "Jean-Luc Brunel", "flightCount": 21, "category": "associate", "slug": "jean-luc-brunel"}, {"id": "Ghislaine Maxwell", "flightCount": 413, "category": "associate", "slug": "ghislaine-maxwell"}, {"id": "Ll", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Marion Nowak", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Pralaya Cuomo", "flightCount": 3, "category": "other", "slug": "pralaya-cuomo"}, {"id": "Walter Cronkite", "flightCount": 1, "category": "celebrity", "slug": "walter-cronkite"}, {"id": "John Amerling", "flightCount": 2, "category": "other", "slug": "john-amerling"}, {"id": "Natalya Maryshov", "flightCount": 3, "category": "associate", "slug": "natalya-malyshev"}, {"id": "Valdson Cotrin", "flightCount": 1, "category": "associate", "slug": "valdson-cotrin"}, {"id": "Gerald Lefcourt", "flightCount": 2, "category": "legal", "slug": "gerald-lefcourt"}, {"id": "Jim Worden", "flightCount": 3, "category": "associate", "slug": "jim-worden"}, {"id": "Sarah Rawsom", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Kathryn Kucka", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Vanessa Breuer", "flightCount": 2, "category": "associate", "slug": "vanessa-breuer"}, {"id": "Lance Calloway", "flightCount": 4, "category": "associate", "slug": "lance-calloway"}, {"id": "Barbara ?", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Venessa", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Dana Burns", "flightCount": 3, "category": "associate", "slug": "dana-burns"}, {"id": "Andrea Willis", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Bh/lm", "flightCount": 6, "category": "other", "slug": ""}, {"id": "Tatyana Simanava", "flightCount": 2, "category": "associate", "slug": "tatyana-simanava"}, {"id": "Jw", "flightCount": 8, "category": "other", "slug": ""}, {"id": "Prince Andrew - Duke Of York", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Katie Braing", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Crasnasry", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Kevin Maxwell", "flightCount": 2, "category": "socialite", "slug": "kevin-maxwell"}, {"id": "Lady Robin Innes Ker", "flightCount": 2, "category": "associate", "slug": "lady-robin-innes-ker"}, {"id": "Joulia Starodoumovit", "flightCount": 3, "category": "associate", "slug": "joulia-starodoumovit"}, {"id": "David Boles", "flightCount": 4, "category": "legal", "slug": "david-boies"}, {"id": "St", "flightCount": 3, "category": "other", "slug": ""}, {"id": "Stefanie Tidwell", "flightCount": 2, "category": "associate", "slug": "stefanie-tidwell"}, {"id": "Ruslana Korshonova", "flightCount": 1, "category": "other", "slug": "ruslana-korshunova"}, {"id": "Juan Molyneux", "flightCount": 1, "category": "other", "slug": ""}, {"id": "Katherine Darby", "flightCount": 1, "category": "associate", "slug": "catherine-derby"}, {"id": "Adriana Ross", "flightCount": 22, "category": "associate", "slug": "adriana-ross"}, {"id": "Ehud Barak", "flightCount": 15, "category": "politician", "slug": "ehud-barak"}, {"id": "Glenn Dubin", "flightCount": 15, "category": "business", "slug": "glenn-dubin"}, {"id": "Alan Dershowitz", "flightCount": 33, "category": "legal", "slug": "alan-dershowitz"}, {"id": "Leon Black", "flightCount": 9, "category": "business", "slug": "leon-black"}, {"id": "Leslie Wexner", "flightCount": 15, "category": "business", "slug": "leslie-wexner"}, {"id": "Eva Andersson-Dubin", "flightCount": 8, "category": "socialite", "slug": "eva-andersson-dubin"}, {"id": "Virginia Roberts", "flightCount": 48, "category": "other", "slug": "virginia-giuffre"}, {"id": "Mark Epstein", "flightCount": 5, "category": "associate", "slug": "mark-epstein"}, {"id": "George Mitchell", "flightCount": 6, "category": "politician", "slug": "george-mitchell"}, {"id": "Flavio Briatore", "flightCount": 1, "category": "business", "slug": "flavio-briatore"}, {"id": "Stephen Hawking", "flightCount": 3, "category": "academic", "slug": "stephen-hawking"}, {"id": "Terje Roed-Larsen", "flightCount": 2, "category": "politician", "slug": "terje-roed-larsen"}, {"id": "Peter Mandelson", "flightCount": 2, "category": "politician", "slug": "peter-mandelson"}, {"id": "Nicole Junkermann", "flightCount": 1, "category": "socialite", "slug": "nicole-junkermann"}, {"id": "Bill Clinton", "flightCount": 38, "category": "politician", "slug": "bill-clinton"}, {"id": "Doug Band", "flightCount": 33, "category": "politician", "slug": "doug-band"}, {"id": "Chauntae Davies", "flightCount": 20, "category": "other", "slug": "chauntae-davies"}, {"id": "Naomi Campbell", "flightCount": 5, "category": "celebrity", "slug": "naomi-campbell"}, {"id": "Clare Hazell-Iveagh", "flightCount": 1, "category": "socialite", "slug": "clare-hazell-iveagh"}, {"id": "Jes Staley", "flightCount": 6, "category": "business", "slug": "jes-staley"}, {"id": "Bill Richardson", "flightCount": 5, "category": "politician", "slug": "bill-richardson"}, {"id": "Prince Andrew", "flightCount": 25, "category": "royalty", "slug": "prince-andrew"}, {"id": "Sarah Ferguson", "flightCount": 2, "category": "royalty", "slug": "sarah-ferguson"}, {"id": "Tiffany Gramza", "flightCount": 1, "category": "associate", "slug": "tiffany-gramza"}, {"id": "Brett Ratner", "flightCount": 3, "category": "celebrity", "slug": "brett-ratner"}, {"id": "Jose Maria Aznar", "flightCount": 2, "category": "politician", "slug": "jose-maria-aznar"}, {"id": "Lawrence Krauss", "flightCount": 1, "category": "academic", "slug": "lawrence-krauss"}, {"id": "Noam Chomsky", "flightCount": 1, "category": "academic", "slug": "noam-chomsky"}, {"id": "Joi Ito", "flightCount": 1, "category": "academic", "slug": "joi-ito"}, {"id": "Chris Tucker", "flightCount": 7, "category": "celebrity", "slug": "chris-tucker"}, {"id": "Kevin Spacey", "flightCount": 6, "category": "celebrity", "slug": "kevin-spacey"}, {"id": "Michael Bloomberg", "flightCount": 1, "category": "politician", "slug": "michael-bloomberg"}, {"id": "Les Moonves", "flightCount": 2, "category": "business", "slug": "les-moonves"}, {"id": "Peggy Siegal", "flightCount": 1, "category": "socialite", "slug": "peggy-siegal"}, {"id": "Teddy Forstmann", "flightCount": 3, "category": "business", "slug": "teddy-forstmann"}, {"id": "Charlie Rose", "flightCount": 2, "category": "celebrity", "slug": "charlie-rose"}, {"id": "Tom Barrack", "flightCount": 1, "category": "business", "slug": "tom-barrack"}, {"id": "George Stephanopoulos", "flightCount": 2, "category": "celebrity", "slug": "george-stephanopoulos"}, {"id": "Michael Ovitz", "flightCount": 2, "category": "business", "slug": "michael-ovitz"}, {"id": "Henry Kissinger", "flightCount": 1, "category": "politician", "slug": "henry-kissinger"}, {"id": "Katie Couric", "flightCount": 1, "category": "celebrity", "slug": "katie-couric"}, {"id": "Peter Soros", "flightCount": 2, "category": "business", "slug": "peter-soros"}, {"id": "Barbara Walters", "flightCount": 1, "category": "celebrity", "slug": "barbara-walters"}, {"id": "Gwendolyn Beck", "flightCount": 3, "category": "associate", "slug": "gwendolyn-beck"}, {"id": "Thomas Pritzker", "flightCount": 1, "category": "business", "slug": "tomas-pritzker"}, {"id": "Lynn Forester de Rothschild", "flightCount": 1, "category": "socialite", "slug": "lynn-forester-de-rothschild"}, {"id": "David Blaine", "flightCount": 2, "category": "celebrity", "slug": "david-blaine"}, {"id": "Pepe Fanjul", "flightCount": 1, "category": "business", "slug": "pepe-fanjul"}, {"id": "Celina Midelfart", "flightCount": 1, "category": "socialite", "slug": "celina-midelfart"}, {"id": "Edgar Bronfman Sr.", "flightCount": 2, "category": "business", "slug": "edgar-bronfman-sr"}, {"id": "Donald Trump", "flightCount": 3, "category": "politician", "slug": "donald-trump"}, {"id": "Mort Zuckerman", "flightCount": 4, "category": "business", "slug": "mort-zuckerman"}, {"id": "Sandy Weill", "flightCount": 1, "category": "business", "slug": "sandy-weill"}, {"id": "Ronald Perelman", "flightCount": 2, "category": "business", "slug": "ronald-perelman"}, {"id": "Juan Alessi", "flightCount": 1, "category": "associate", "slug": "juan-alessi"}];
+const EDGES = [{"source": "1 Nanny", "target": "1 Passenger", "weight": 1}, {"source": "1 Nanny", "target": "Jeffrey Epstein", "weight": 1}, {"source": "1 Nanny", "target": "Redacted", "weight": 1}, {"source": "1 Nanny", "target": "Soon Yi Previn", "weight": 1}, {"source": "1 Nanny", "target": "Woody Allen", "weight": 1}, {"source": "1 Passenger", "target": "Jeffrey Epstein", "weight": 2}, {"source": "1 Passenger", "target": "Redacted", "weight": 2}, {"source": "1 Passenger", "target": "Soon Yi Previn", "weight": 2}, {"source": "1 Passenger", "target": "Woody Allen", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Redacted", "weight": 9}, {"source": "Jeffrey Epstein", "target": "Soon Yi Previn", "weight": 8}, {"source": "Jeffrey Epstein", "target": "Woody Allen", "weight": 9}, {"source": "Redacted", "target": "Soon Yi Previn", "weight": 8}, {"source": "Redacted", "target": "Woody Allen", "weight": 9}, {"source": "Soon Yi Previn", "target": "Woody Allen", "weight": 8}, {"source": "1 Female Friend", "target": "Jeffrey Epstein", "weight": 1}, {"source": "1 Female Friend", "target": "Redacted", "weight": 1}, {"source": "1 Female Friend", "target": "Soon Yi Previn", "weight": 1}, {"source": "1 Female Friend", "target": "Woody Allen", "weight": 1}, {"source": "Bill Gates", "target": "Larry Visoski", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Pilot: Lv", "weight": 2}, {"source": "Pilot: Lv", "target": "Redacted", "weight": 2}, {"source": "Pilot: Lv", "target": "Soon Yi Previn", "weight": 1}, {"source": "Pilot: Lv", "target": "Woody Allen", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Larry Summers", "weight": 5}, {"source": "Jeffrey Epstein", "target": "Mrs Allen (soon Yi Previn)", "weight": 1}, {"source": "Larry Summers", "target": "Mrs Allen (soon Yi Previn)", "weight": 1}, {"source": "Larry Summers", "target": "Pilot: Lv", "weight": 1}, {"source": "Larry Summers", "target": "Redacted", "weight": 1}, {"source": "Larry Summers", "target": "Woody Allen", "weight": 1}, {"source": "Mrs Allen (soon Yi Previn)", "target": "Pilot: Lv", "weight": 1}, {"source": "Mrs Allen (soon Yi Previn)", "target": "Redacted", "weight": 1}, {"source": "Mrs Allen (soon Yi Previn)", "target": "Woody Allen", "weight": 1}, {"source": "Darren Indyke Pilots: Lv", "target": "Jeffrey Epstein", "weight": 3}, {"source": "Darren Indyke Pilots: Lv", "target": "Nadia Marcinkova", "weight": 3}, {"source": "Jeffrey Epstein", "target": "Nadia Marcinkova", "weight": 137}, {"source": "Ch", "target": "Larry Visoski", "weight": 4}, {"source": "Jim Barickoske", "target": "Larry Visoski", "weight": 1}, {"source": "Jim Barickoske", "target": "Lasham To Stansted", "weight": 1}, {"source": "Larry Visoski", "target": "Lasham To Stansted", "weight": 1}, {"source": "Jb", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Jb", "target": "Redacted", "weight": 1}, {"source": "Jb", "target": "Redacted Pilots: Lv", "weight": 1}, {"source": "Jb", "target": "Soon Yi Previn", "weight": 1}, {"source": "Jb", "target": "Woody Allen", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Redacted Pilots: Lv", "weight": 1}, {"source": "Redacted", "target": "Redacted Pilots: Lv", "weight": 1}, {"source": "Redacted Pilots: Lv", "target": "Soon Yi Previn", "weight": 1}, {"source": "Redacted Pilots: Lv", "target": "Woody Allen", "weight": 1}, {"source": "Jb", "target": "Larry Visoski", "weight": 2}, {"source": "Larry Visoski", "target": "Nadia Marcinkova", "weight": 10}, {"source": "Larry Visoski", "target": "Lesley Groff", "weight": 9}, {"source": "Darren Indyke", "target": "David Rodgers", "weight": 1}, {"source": "Darren Indyke", "target": "Doug Shoettle", "weight": 1}, {"source": "Darren Indyke", "target": "Igor Zinoviev", "weight": 2}, {"source": "Darren Indyke", "target": "Jeffrey Epstein", "weight": 15}, {"source": "Darren Indyke", "target": "Nick Pilots: Lv", "weight": 1}, {"source": "David Rodgers", "target": "Doug Shoettle", "weight": 1}, {"source": "David Rodgers", "target": "Igor Zinoviev", "weight": 1}, {"source": "David Rodgers", "target": "Jeffrey Epstein", "weight": 1}, {"source": "David Rodgers", "target": "Nick Pilots: Lv", "weight": 1}, {"source": "Doug Shoettle", "target": "Igor Zinoviev", "weight": 1}, {"source": "Doug Shoettle", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Doug Shoettle", "target": "Nick Pilots: Lv", "weight": 1}, {"source": "Igor Zinoviev", "target": "Jeffrey Epstein", "weight": 19}, {"source": "Igor Zinoviev", "target": "Nick Pilots: Lv", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Nick Pilots: Lv", "weight": 1}, {"source": "Empty", "target": "Larry Visoski", "weight": 2}, {"source": "Diverted To Alternate", "target": "Larry Visoski", "weight": 1}, {"source": "I Sat On Jumpseat", "target": "Larry Visoski", "weight": 1}, {"source": "I Sat On Jumpseat", "target": "Nadia Marcinkova Flew In The Right Seat", "weight": 1}, {"source": "Larry Visoski", "target": "Nadia Marcinkova Flew In The Right Seat", "weight": 1}, {"source": "Bill Hammond", "target": "Larry Visoski", "weight": 15}, {"source": "Bill Hammond", "target": "Darren Indyke", "weight": 1}, {"source": "Bill Hammond", "target": "Igor Zinoviev", "weight": 2}, {"source": "Bill Hammond", "target": "Jeffrey Epstein", "weight": 4}, {"source": "Bill Hammond", "target": "Pilots: Lv", "weight": 1}, {"source": "Darren Indyke", "target": "Pilots: Lv", "weight": 1}, {"source": "Igor Zinoviev", "target": "Pilots: Lv", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Pilots: Lv", "weight": 1}, {"source": "Larry Visoski", "target": "Lw", "weight": 1}, {"source": "Clare Watts", "target": "Larry Visoski", "weight": 16}, {"source": "Bill Hammond", "target": "Clare Watts", "weight": 1}, {"source": "Catherine Derby", "target": "Jeffrey Epstein", "weight": 2}, {"source": "Catherine Derby", "target": "Jennifer Kalin", "weight": 2}, {"source": "Catherine Derby", "target": "Nadia Marcinkova", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Jennifer Kalin", "weight": 9}, {"source": "Jennifer Kalin", "target": "Nadia Marcinkova", "weight": 6}, {"source": "Andrew Fargus", "target": "Igor Zinoviev", "weight": 1}, {"source": "Andrew Fargus", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Andrew Fargus", "target": "Jr", "weight": 1}, {"source": "Andrew Fargus", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Igor Zinoviev", "target": "Jr", "weight": 1}, {"source": "Igor Zinoviev", "target": "Nadia Marcinkova", "weight": 11}, {"source": "Jeffrey Epstein", "target": "Jr", "weight": 1}, {"source": "Jr", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Jean-Luc Brunel", "target": "Jeffrey Epstein", "weight": 21}, {"source": "Jean-Luc Brunel", "target": "Lana Catterton", "weight": 1}, {"source": "Jean-Luc Brunel", "target": "Nadia Marcinkova", "weight": 4}, {"source": "Jean-Luc Brunel", "target": "Sarah Kellen", "weight": 15}, {"source": "Jeffrey Epstein", "target": "Lana Catterton", "weight": 8}, {"source": "Jeffrey Epstein", "target": "Sarah Kellen", "weight": 364}, {"source": "Lana Catterton", "target": "Nadia Marcinkova", "weight": 4}, {"source": "Lana Catterton", "target": "Sarah Kellen", "weight": 6}, {"source": "Nadia Marcinkova", "target": "Sarah Kellen", "weight": 120}, {"source": "Ghislaine Maxwell", "target": "Jeffrey Epstein", "weight": 404}, {"source": "Ghislaine Maxwell", "target": "Ll", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Nadia Marcinkova", "weight": 110}, {"source": "Ghislaine Maxwell", "target": "Sarah Kellen", "weight": 317}, {"source": "Jeffrey Epstein", "target": "Ll", "weight": 1}, {"source": "Ll", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Ll", "target": "Sarah Kellen", "weight": 1}, {"source": "Igor Zinoviev", "target": "Lana Catterton", "weight": 7}, {"source": "Igor Zinoviev", "target": "Marion Nowak", "weight": 1}, {"source": "Igor Zinoviev", "target": "Pralaya Cuomo", "weight": 3}, {"source": "Igor Zinoviev", "target": "Sarah Kellen", "weight": 10}, {"source": "Jeffrey Epstein", "target": "Marion Nowak", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Pralaya Cuomo", "weight": 3}, {"source": "Lana Catterton", "target": "Marion Nowak", "weight": 1}, {"source": "Lana Catterton", "target": "Pralaya Cuomo", "weight": 2}, {"source": "Marion Nowak", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Marion Nowak", "target": "Pralaya Cuomo", "weight": 1}, {"source": "Marion Nowak", "target": "Sarah Kellen", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Pralaya Cuomo", "weight": 3}, {"source": "Pralaya Cuomo", "target": "Sarah Kellen", "weight": 2}, {"source": "Igor Zinoviev", "target": "John Amerling", "weight": 2}, {"source": "Igor Zinoviev", "target": "Walter Cronkite", "weight": 1}, {"source": "Jeffrey Epstein", "target": "John Amerling", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Walter Cronkite", "weight": 1}, {"source": "John Amerling", "target": "Lana Catterton", "weight": 1}, {"source": "John Amerling", "target": "Nadia Marcinkova", "weight": 2}, {"source": "John Amerling", "target": "Pralaya Cuomo", "weight": 2}, {"source": "John Amerling", "target": "Sarah Kellen", "weight": 1}, {"source": "John Amerling", "target": "Walter Cronkite", "weight": 1}, {"source": "Lana Catterton", "target": "Walter Cronkite", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Walter Cronkite", "weight": 1}, {"source": "Pralaya Cuomo", "target": "Walter Cronkite", "weight": 1}, {"source": "Sarah Kellen", "target": "Walter Cronkite", "weight": 1}, {"source": "Bill Hammond", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Bill Hammond", "target": "John Amerling", "weight": 1}, {"source": "Bill Hammond", "target": "Lesley Groff", "weight": 1}, {"source": "Bill Hammond", "target": "Nadia Marcinkova", "weight": 3}, {"source": "Bill Hammond", "target": "Natalya Maryshov", "weight": 1}, {"source": "Bill Hammond", "target": "Pralaya Cuomo", "weight": 1}, {"source": "Bill Hammond", "target": "Valdson Cotrin", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Igor Zinoviev", "weight": 4}, {"source": "Ghislaine Maxwell", "target": "John Amerling", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Lesley Groff", "weight": 66}, {"source": "Ghislaine Maxwell", "target": "Natalya Maryshov", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Pralaya Cuomo", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Valdson Cotrin", "weight": 1}, {"source": "Igor Zinoviev", "target": "Lesley Groff", "weight": 5}, {"source": "Igor Zinoviev", "target": "Natalya Maryshov", "weight": 1}, {"source": "Igor Zinoviev", "target": "Valdson Cotrin", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Lesley Groff", "weight": 87}, {"source": "Jeffrey Epstein", "target": "Natalya Maryshov", "weight": 3}, {"source": "Jeffrey Epstein", "target": "Valdson Cotrin", "weight": 1}, {"source": "John Amerling", "target": "Lesley Groff", "weight": 1}, {"source": "John Amerling", "target": "Natalya Maryshov", "weight": 1}, {"source": "John Amerling", "target": "Valdson Cotrin", "weight": 1}, {"source": "Lesley Groff", "target": "Nadia Marcinkova", "weight": 33}, {"source": "Lesley Groff", "target": "Natalya Maryshov", "weight": 1}, {"source": "Lesley Groff", "target": "Pralaya Cuomo", "weight": 1}, {"source": "Lesley Groff", "target": "Valdson Cotrin", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Natalya Maryshov", "weight": 2}, {"source": "Nadia Marcinkova", "target": "Valdson Cotrin", "weight": 1}, {"source": "Natalya Maryshov", "target": "Pralaya Cuomo", "weight": 1}, {"source": "Natalya Maryshov", "target": "Valdson Cotrin", "weight": 1}, {"source": "Pralaya Cuomo", "target": "Valdson Cotrin", "weight": 1}, {"source": "Gerald Lefcourt", "target": "Jim Worden", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Larry Visoski", "weight": 11}, {"source": "Jeffrey Epstein", "target": "Sarah Rawsom", "weight": 1}, {"source": "Larry Visoski", "target": "Sarah Rawsom", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Sarah Rawsom", "weight": 1}, {"source": "Jennifer Kalin", "target": "Larry Visoski", "weight": 7}, {"source": "Jennifer Kalin", "target": "Natalya Maryshov", "weight": 1}, {"source": "Jennifer Kalin", "target": "Sarah Kellen", "weight": 5}, {"source": "Larry Visoski", "target": "Natalya Maryshov", "weight": 2}, {"source": "Larry Visoski", "target": "Sarah Kellen", "weight": 7}, {"source": "Natalya Maryshov", "target": "Sarah Kellen", "weight": 1}, {"source": "Igor Zinoviev", "target": "Larry Visoski", "weight": 3}, {"source": "Lesley Groff", "target": "Sarah Kellen", "weight": 58}, {"source": "Igor Zinoviev", "target": "Jennifer Kalin", "weight": 2}, {"source": "Igor Zinoviev", "target": "Kathryn Kucka", "weight": 1}, {"source": "Igor Zinoviev", "target": "Vanessa Breuer", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Kathryn Kucka", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Vanessa Breuer", "weight": 2}, {"source": "Jennifer Kalin", "target": "Kathryn Kucka", "weight": 1}, {"source": "Jennifer Kalin", "target": "Lesley Groff", "weight": 3}, {"source": "Jennifer Kalin", "target": "Vanessa Breuer", "weight": 2}, {"source": "Kathryn Kucka", "target": "Larry Visoski", "weight": 1}, {"source": "Kathryn Kucka", "target": "Lesley Groff", "weight": 1}, {"source": "Kathryn Kucka", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Kathryn Kucka", "target": "Sarah Kellen", "weight": 1}, {"source": "Kathryn Kucka", "target": "Vanessa Breuer", "weight": 1}, {"source": "Larry Visoski", "target": "Vanessa Breuer", "weight": 2}, {"source": "Lesley Groff", "target": "Vanessa Breuer", "weight": 2}, {"source": "Nadia Marcinkova", "target": "Vanessa Breuer", "weight": 2}, {"source": "Sarah Kellen", "target": "Vanessa Breuer", "weight": 1}, {"source": "Igor Zinoviev", "target": "Lance Calloway", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Lance Calloway", "weight": 3}, {"source": "Jennifer Kalin", "target": "Lance Calloway", "weight": 2}, {"source": "Lance Calloway", "target": "Larry Visoski", "weight": 3}, {"source": "Lance Calloway", "target": "Lesley Groff", "weight": 1}, {"source": "Lance Calloway", "target": "Nadia Marcinkova", "weight": 4}, {"source": "Lance Calloway", "target": "Vanessa Breuer", "weight": 1}, {"source": "Barbara ?", "target": "Bill Hammond", "weight": 1}, {"source": "Barbara ?", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Barbara ?", "target": "Lance Calloway", "weight": 1}, {"source": "Barbara ?", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Barbara ?", "target": "Sarah Kellen", "weight": 1}, {"source": "Bill Hammond", "target": "Lance Calloway", "weight": 1}, {"source": "Bill Hammond", "target": "Sarah Kellen", "weight": 1}, {"source": "Lance Calloway", "target": "Sarah Kellen", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Venessa", "weight": 1}, {"source": "Lance Calloway", "target": "Natalya Maryshov", "weight": 1}, {"source": "Lance Calloway", "target": "Venessa", "weight": 1}, {"source": "Larry Visoski", "target": "Venessa", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Venessa", "weight": 1}, {"source": "Natalya Maryshov", "target": "Venessa", "weight": 1}, {"source": "Andrea Willis", "target": "Dana Burns", "weight": 1}, {"source": "Andrea Willis", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Andrea Willis", "target": "Larry Visoski", "weight": 1}, {"source": "Andrea Willis", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Andrea Willis", "target": "Sarah Kellen", "weight": 1}, {"source": "Dana Burns", "target": "Jeffrey Epstein", "weight": 3}, {"source": "Dana Burns", "target": "Larry Visoski", "weight": 1}, {"source": "Dana Burns", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Dana Burns", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Jennifer Kalin", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Lance Calloway", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Larry Visoski", "weight": 1}, {"source": "Bh/lm", "target": "Dana Burns", "weight": 2}, {"source": "Bh/lm", "target": "Igor Zinoviev", "weight": 2}, {"source": "Bh/lm", "target": "Jeffrey Epstein", "weight": 5}, {"source": "Bh/lm", "target": "Tatyana Simanava", "weight": 2}, {"source": "Dana Burns", "target": "Igor Zinoviev", "weight": 2}, {"source": "Dana Burns", "target": "Tatyana Simanava", "weight": 2}, {"source": "Igor Zinoviev", "target": "Tatyana Simanava", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Tatyana Simanava", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Jw", "weight": 8}, {"source": "Crasnasry", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Crasnasry", "target": "Jw", "weight": 1}, {"source": "Crasnasry", "target": "Katie Braing", "weight": 1}, {"source": "Crasnasry", "target": "Prince Andrew - Duke Of York", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Katie Braing", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Prince Andrew - Duke Of York", "weight": 1}, {"source": "Jw", "target": "Katie Braing", "weight": 1}, {"source": "Jw", "target": "Prince Andrew - Duke Of York", "weight": 1}, {"source": "Katie Braing", "target": "Prince Andrew - Duke Of York", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Kevin Maxwell", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Lady Robin Innes Ker", "weight": 2}, {"source": "Jw", "target": "Kevin Maxwell", "weight": 2}, {"source": "Jw", "target": "Lady Robin Innes Ker", "weight": 2}, {"source": "Kevin Maxwell", "target": "Lady Robin Innes Ker", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Joulia Starodoumovit", "weight": 3}, {"source": "Jennifer Kalin", "target": "Joulia Starodoumovit", "weight": 3}, {"source": "Joulia Starodoumovit", "target": "Larry Visoski", "weight": 2}, {"source": "Joulia Starodoumovit", "target": "Sarah Kellen", "weight": 3}, {"source": "Bh/lm", "target": "Jennifer Kalin", "weight": 1}, {"source": "Bh/lm", "target": "Joulia Starodoumovit", "weight": 1}, {"source": "Bh/lm", "target": "Sarah Kellen", "weight": 3}, {"source": "Bh/lm", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "David Boles", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "David Boles", "target": "Jeffrey Epstein", "weight": 4}, {"source": "David Boles", "target": "Sarah Kellen", "weight": 3}, {"source": "Jeffrey Epstein", "target": "St", "weight": 3}, {"source": "Nadia Marcinkova", "target": "St", "weight": 2}, {"source": "Sarah Kellen", "target": "St", "weight": 3}, {"source": "Igor Zinoviev", "target": "St", "weight": 1}, {"source": "Lana Catterton", "target": "St", "weight": 1}, {"source": "Igor Zinoviev", "target": "Ruslana Korshonova", "weight": 1}, {"source": "Igor Zinoviev", "target": "Stefanie Tidwell", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Ruslana Korshonova", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Stefanie Tidwell", "weight": 2}, {"source": "Lana Catterton", "target": "Ruslana Korshonova", "weight": 1}, {"source": "Lana Catterton", "target": "Stefanie Tidwell", "weight": 2}, {"source": "Ruslana Korshonova", "target": "Sarah Kellen", "weight": 1}, {"source": "Ruslana Korshonova", "target": "Stefanie Tidwell", "weight": 1}, {"source": "Sarah Kellen", "target": "Stefanie Tidwell", "weight": 2}, {"source": "Igor Zinoviev", "target": "Juan Molyneux", "weight": 1}, {"source": "Igor Zinoviev", "target": "Katherine Darby", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Juan Molyneux", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Katherine Darby", "weight": 1}, {"source": "Juan Molyneux", "target": "Katherine Darby", "weight": 1}, {"source": "Juan Molyneux", "target": "Lana Catterton", "weight": 1}, {"source": "Juan Molyneux", "target": "Sarah Kellen", "weight": 1}, {"source": "Juan Molyneux", "target": "Stefanie Tidwell", "weight": 1}, {"source": "Katherine Darby", "target": "Lana Catterton", "weight": 1}, {"source": "Katherine Darby", "target": "Sarah Kellen", "weight": 1}, {"source": "Katherine Darby", "target": "Stefanie Tidwell", "weight": 1}, {"source": "David Boles", "target": "Igor Zinoviev", "weight": 1}, {"source": "David Boles", "target": "Lana Catterton", "weight": 1}, {"source": "Darren Indyke", "target": "Sarah Kellen", "weight": 3}, {"source": "Darren Indyke", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Adriana Ross", "target": "Ghislaine Maxwell", "weight": 22}, {"source": "Adriana Ross", "target": "Jeffrey Epstein", "weight": 22}, {"source": "Adriana Ross", "target": "Nadia Marcinkova", "weight": 19}, {"source": "Adriana Ross", "target": "Sarah Kellen", "weight": 20}, {"source": "Ehud Barak", "target": "Jeffrey Epstein", "weight": 15}, {"source": "Ehud Barak", "target": "Ghislaine Maxwell", "weight": 10}, {"source": "Ehud Barak", "target": "Sarah Kellen", "weight": 9}, {"source": "Ghislaine Maxwell", "target": "Jean-Luc Brunel", "weight": 20}, {"source": "Glenn Dubin", "target": "Jeffrey Epstein", "weight": 15}, {"source": "Ghislaine Maxwell", "target": "Glenn Dubin", "weight": 12}, {"source": "Glenn Dubin", "target": "Sarah Kellen", "weight": 10}, {"source": "Alan Dershowitz", "target": "Ghislaine Maxwell", "weight": 26}, {"source": "Alan Dershowitz", "target": "Jeffrey Epstein", "weight": 33}, {"source": "Alan Dershowitz", "target": "Sarah Kellen", "weight": 21}, {"source": "Alan Dershowitz", "target": "Nadia Marcinkova", "weight": 6}, {"source": "Jeffrey Epstein", "target": "Leon Black", "weight": 9}, {"source": "Ghislaine Maxwell", "target": "Leon Black", "weight": 5}, {"source": "Leon Black", "target": "Sarah Kellen", "weight": 5}, {"source": "Adriana Ross", "target": "Lesley Groff", "weight": 3}, {"source": "Jeffrey Epstein", "target": "Leslie Wexner", "weight": 15}, {"source": "Eva Andersson-Dubin", "target": "Ghislaine Maxwell", "weight": 7}, {"source": "Eva Andersson-Dubin", "target": "Glenn Dubin", "weight": 8}, {"source": "Eva Andersson-Dubin", "target": "Jeffrey Epstein", "weight": 8}, {"source": "Eva Andersson-Dubin", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Eva Andersson-Dubin", "target": "Sarah Kellen", "weight": 5}, {"source": "Glenn Dubin", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Virginia Roberts", "weight": 48}, {"source": "Jeffrey Epstein", "target": "Virginia Roberts", "weight": 48}, {"source": "Nadia Marcinkova", "target": "Virginia Roberts", "weight": 19}, {"source": "Sarah Kellen", "target": "Virginia Roberts", "weight": 38}, {"source": "Ghislaine Maxwell", "target": "Mark Epstein", "weight": 5}, {"source": "Jeffrey Epstein", "target": "Mark Epstein", "weight": 5}, {"source": "Mark Epstein", "target": "Sarah Kellen", "weight": 5}, {"source": "George Mitchell", "target": "Jeffrey Epstein", "weight": 6}, {"source": "George Mitchell", "target": "Ghislaine Maxwell", "weight": 4}, {"source": "George Mitchell", "target": "Sarah Kellen", "weight": 4}, {"source": "Flavio Briatore", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Flavio Briatore", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Flavio Briatore", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Stephen Hawking", "weight": 3}, {"source": "Jeffrey Epstein", "target": "Stephen Hawking", "weight": 3}, {"source": "Sarah Kellen", "target": "Stephen Hawking", "weight": 2}, {"source": "Nadia Marcinkova", "target": "Stephen Hawking", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Terje Roed-Larsen", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Terje Roed-Larsen", "weight": 2}, {"source": "Sarah Kellen", "target": "Terje Roed-Larsen", "weight": 2}, {"source": "Adriana Ross", "target": "Igor Zinoviev", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Peter Mandelson", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Peter Mandelson", "weight": 2}, {"source": "Peter Mandelson", "target": "Sarah Kellen", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Nicole Junkermann", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Nicole Junkermann", "weight": 1}, {"source": "Nicole Junkermann", "target": "Sarah Kellen", "weight": 1}, {"source": "Bill Clinton", "target": "Doug Band", "weight": 33}, {"source": "Bill Clinton", "target": "Jeffrey Epstein", "weight": 38}, {"source": "Doug Band", "target": "Jeffrey Epstein", "weight": 33}, {"source": "Bill Clinton", "target": "Ghislaine Maxwell", "weight": 31}, {"source": "Bill Clinton", "target": "Sarah Kellen", "weight": 16}, {"source": "Doug Band", "target": "Ghislaine Maxwell", "weight": 26}, {"source": "Doug Band", "target": "Sarah Kellen", "weight": 12}, {"source": "Chauntae Davies", "target": "Ghislaine Maxwell", "weight": 20}, {"source": "Chauntae Davies", "target": "Jeffrey Epstein", "weight": 20}, {"source": "Adriana Ross", "target": "Chauntae Davies", "weight": 2}, {"source": "Chauntae Davies", "target": "Nadia Marcinkova", "weight": 7}, {"source": "Chauntae Davies", "target": "Sarah Kellen", "weight": 10}, {"source": "Ghislaine Maxwell", "target": "Naomi Campbell", "weight": 5}, {"source": "Jeffrey Epstein", "target": "Naomi Campbell", "weight": 5}, {"source": "Naomi Campbell", "target": "Sarah Kellen", "weight": 5}, {"source": "Clare Hazell-Iveagh", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Clare Hazell-Iveagh", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Jes Staley", "weight": 6}, {"source": "Ghislaine Maxwell", "target": "Jes Staley", "weight": 3}, {"source": "Jes Staley", "target": "Sarah Kellen", "weight": 3}, {"source": "Bill Richardson", "target": "Ghislaine Maxwell", "weight": 5}, {"source": "Bill Richardson", "target": "Jeffrey Epstein", "weight": 5}, {"source": "Bill Richardson", "target": "Nadia Marcinkova", "weight": 1}, {"source": "Bill Richardson", "target": "Sarah Kellen", "weight": 4}, {"source": "Ghislaine Maxwell", "target": "Prince Andrew", "weight": 24}, {"source": "Jeffrey Epstein", "target": "Prince Andrew", "weight": 25}, {"source": "Prince Andrew", "target": "Sarah Kellen", "weight": 17}, {"source": "Ghislaine Maxwell", "target": "Sarah Ferguson", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Sarah Ferguson", "weight": 2}, {"source": "Prince Andrew", "target": "Sarah Ferguson", "weight": 2}, {"source": "Sarah Ferguson", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Tiffany Gramza", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Tiffany Gramza", "weight": 1}, {"source": "Sarah Kellen", "target": "Tiffany Gramza", "weight": 1}, {"source": "Brett Ratner", "target": "Ghislaine Maxwell", "weight": 3}, {"source": "Brett Ratner", "target": "Jeffrey Epstein", "weight": 3}, {"source": "Brett Ratner", "target": "Sarah Kellen", "weight": 3}, {"source": "Jean-Luc Brunel", "target": "Virginia Roberts", "weight": 4}, {"source": "Jeffrey Epstein", "target": "Jose Maria Aznar", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Jose Maria Aznar", "weight": 1}, {"source": "Jose Maria Aznar", "target": "Sarah Kellen", "weight": 1}, {"source": "Alan Dershowitz", "target": "Virginia Roberts", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Lawrence Krauss", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Lawrence Krauss", "weight": 1}, {"source": "Lawrence Krauss", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Noam Chomsky", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Noam Chomsky", "weight": 1}, {"source": "Noam Chomsky", "target": "Sarah Kellen", "weight": 1}, {"source": "Prince Andrew", "target": "Virginia Roberts", "weight": 4}, {"source": "Jeffrey Epstein", "target": "Joi Ito", "weight": 1}, {"source": "Bill Clinton", "target": "Chauntae Davies", "weight": 6}, {"source": "Chauntae Davies", "target": "Doug Band", "weight": 6}, {"source": "Bill Clinton", "target": "Chris Tucker", "weight": 7}, {"source": "Chris Tucker", "target": "Doug Band", "weight": 7}, {"source": "Chris Tucker", "target": "Ghislaine Maxwell", "weight": 7}, {"source": "Chris Tucker", "target": "Jeffrey Epstein", "weight": 7}, {"source": "Bill Clinton", "target": "Kevin Spacey", "weight": 6}, {"source": "Chauntae Davies", "target": "Chris Tucker", "weight": 5}, {"source": "Chauntae Davies", "target": "Kevin Spacey", "weight": 5}, {"source": "Chris Tucker", "target": "Kevin Spacey", "weight": 6}, {"source": "Doug Band", "target": "Kevin Spacey", "weight": 6}, {"source": "Ghislaine Maxwell", "target": "Kevin Spacey", "weight": 6}, {"source": "Jeffrey Epstein", "target": "Kevin Spacey", "weight": 6}, {"source": "Chauntae Davies", "target": "Virginia Roberts", "weight": 4}, {"source": "Alan Dershowitz", "target": "Lesley Groff", "weight": 5}, {"source": "Chauntae Davies", "target": "Lesley Groff", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Michael Bloomberg", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Michael Bloomberg", "weight": 1}, {"source": "Michael Bloomberg", "target": "Sarah Kellen", "weight": 1}, {"source": "Lesley Groff", "target": "Virginia Roberts", "weight": 3}, {"source": "Adriana Ross", "target": "Virginia Roberts", "weight": 1}, {"source": "Leon Black", "target": "Lesley Groff", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Les Moonves", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Les Moonves", "weight": 1}, {"source": "Les Moonves", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Peggy Siegal", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Peggy Siegal", "weight": 1}, {"source": "Nadia Marcinkova", "target": "Prince Andrew", "weight": 3}, {"source": "Jes Staley", "target": "Lesley Groff", "weight": 1}, {"source": "Lesley Groff", "target": "Leslie Wexner", "weight": 4}, {"source": "Ghislaine Maxwell", "target": "Teddy Forstmann", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Teddy Forstmann", "weight": 3}, {"source": "Sarah Kellen", "target": "Teddy Forstmann", "weight": 1}, {"source": "Charlie Rose", "target": "Jeffrey Epstein", "weight": 2}, {"source": "Charlie Rose", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Charlie Rose", "target": "Sarah Kellen", "weight": 1}, {"source": "Brett Ratner", "target": "Lesley Groff", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Tom Barrack", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Tom Barrack", "weight": 1}, {"source": "George Stephanopoulos", "target": "Jeffrey Epstein", "weight": 2}, {"source": "George Stephanopoulos", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "George Stephanopoulos", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Michael Ovitz", "weight": 2}, {"source": "Jeffrey Epstein", "target": "Michael Ovitz", "weight": 2}, {"source": "Michael Ovitz", "target": "Sarah Kellen", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Henry Kissinger", "weight": 1}, {"source": "Henry Kissinger", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Henry Kissinger", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Katie Couric", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Katie Couric", "weight": 1}, {"source": "Katie Couric", "target": "Sarah Kellen", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Peter Soros", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Peter Soros", "weight": 1}, {"source": "Barbara Walters", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Barbara Walters", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Barbara Walters", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Gwendolyn Beck", "weight": 3}, {"source": "Gwendolyn Beck", "target": "Jeffrey Epstein", "weight": 3}, {"source": "Gwendolyn Beck", "target": "Sarah Kellen", "weight": 2}, {"source": "Ehud Barak", "target": "Lesley Groff", "weight": 1}, {"source": "Jean-Luc Brunel", "target": "Lesley Groff", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Larry Summers", "weight": 1}, {"source": "Darren Indyke", "target": "Lesley Groff", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Thomas Pritzker", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Thomas Pritzker", "weight": 1}, {"source": "Sarah Kellen", "target": "Thomas Pritzker", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Lynn Forester de Rothschild", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Lynn Forester de Rothschild", "weight": 1}, {"source": "David Blaine", "target": "Ghislaine Maxwell", "weight": 2}, {"source": "David Blaine", "target": "Jeffrey Epstein", "weight": 2}, {"source": "Lesley Groff", "target": "Prince Andrew", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Pepe Fanjul", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Pepe Fanjul", "weight": 1}, {"source": "Lesley Groff", "target": "Pepe Fanjul", "weight": 1}, {"source": "Pepe Fanjul", "target": "Sarah Kellen", "weight": 1}, {"source": "Celina Midelfart", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Celina Midelfart", "target": "Jeffrey Epstein", "weight": 1}, {"source": "Edgar Bronfman Sr.", "target": "Jeffrey Epstein", "weight": 2}, {"source": "Edgar Bronfman Sr.", "target": "Ghislaine Maxwell", "weight": 1}, {"source": "Edgar Bronfman Sr.", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Leslie Wexner", "weight": 6}, {"source": "Leslie Wexner", "target": "Sarah Kellen", "weight": 1}, {"source": "Donald Trump", "target": "Ghislaine Maxwell", "weight": 2}, {"source": "Donald Trump", "target": "Jeffrey Epstein", "weight": 3}, {"source": "Donald Trump", "target": "Sarah Kellen", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Mort Zuckerman", "weight": 3}, {"source": "Jeffrey Epstein", "target": "Mort Zuckerman", "weight": 4}, {"source": "Mort Zuckerman", "target": "Sarah Kellen", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Sandy Weill", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Sandy Weill", "weight": 1}, {"source": "Sandy Weill", "target": "Sarah Kellen", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Ronald Perelman", "weight": 2}, {"source": "Ghislaine Maxwell", "target": "Ronald Perelman", "weight": 1}, {"source": "Ronald Perelman", "target": "Sarah Kellen", "weight": 1}, {"source": "Donald Trump", "target": "Lesley Groff", "weight": 1}, {"source": "Lesley Groff", "target": "Teddy Forstmann", "weight": 1}, {"source": "Lesley Groff", "target": "Mort Zuckerman", "weight": 1}, {"source": "Ghislaine Maxwell", "target": "Juan Alessi", "weight": 1}, {"source": "Jeffrey Epstein", "target": "Juan Alessi", "weight": 1}, {"source": "Juan Alessi", "target": "Lesley Groff", "weight": 1}];
+const TOP_CONNECTED = [["Jeffrey Epstein", 110], ["Ghislaine Maxwell", 80], ["Sarah Kellen", 76], ["Nadia Marcinkova", 39], ["Igor Zinoviev", 35], ["Lesley Groff", 32], ["Larry Visoski", 28], ["Bill Hammond", 16], ["Lana Catterton", 15], ["Jennifer Kalin", 14], ["Natalya Maryshov", 14], ["Pralaya Cuomo", 13], ["Lance Calloway", 13], ["John Amerling", 12], ["Redacted", 11], ["Woody Allen", 11], ["Chauntae Davies", 11], ["Darren Indyke", 10], ["Virginia Roberts", 10], ["Soon Yi Previn", 9], ["Valdson Cotrin", 9], ["Vanessa Breuer", 9], ["Kathryn Kucka", 8], ["Dana Burns", 8], ["Bh/lm", 8], ["Adriana Ross", 8], ["Jean-Luc Brunel", 7], ["Walter Cronkite", 7], ["Stefanie Tidwell", 7], ["Bill Clinton", 7]];
+const CATEGORIES = ["academic", "associate", "business", "celebrity", "legal", "other", "politician", "royalty", "socialite"];
+const CATEGORY_COLORS = {"associate": "#cc0000", "socialite": "#e040fb", "politician": "#2196f3", "business": "#4caf50", "celebrity": "#ffc107", "legal": "#ff9800", "royalty": "#ffd700", "academic": "#00bcd4", "military-intelligence": "#1a237e", "other": "#757575"};
+
+// ── Build adjacency for popup connections ────────────────────────────
+const adjacency = {};
+EDGES.forEach(e => {
+    if (!adjacency[e.source]) adjacency[e.source] = {};
+    if (!adjacency[e.target]) adjacency[e.target] = {};
+    adjacency[e.source][e.target] = (adjacency[e.source][e.target] || 0) + e.weight;
+    adjacency[e.target][e.source] = (adjacency[e.target][e.source] || 0) + e.weight;
+});
+
+// ── Node map for quick lookup ────────────────────────────────────────
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.id] = n; });
+
+// ── SVG setup ────────────────────────────────────────────────────────
+const container = document.getElementById('graphContainer');
+const svg = d3.select('#networkSvg');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+const g = svg.append('g');
+
+// Zoom behavior
+const zoom = d3.zoom()
+    .scaleExtent([0.1, 8])
+    .on('zoom', (event) => {
+        g.attr('transform', event.transform);
+    });
+svg.call(zoom);
+
+// ── Force simulation ─────────────────────────────────────────────────
+const simulation = d3.forceSimulation(NODES)
+    .force('link', d3.forceLink(EDGES).id(d => d.id).distance(80))
+    .force('charge', d3.forceManyBody().strength(-120))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(d => getRadius(d) + 2));
+
+// ── Draw edges ───────────────────────────────────────────────────────
+const link = g.append('g')
+    .attr('class', 'links')
+    .selectAll('line')
+    .data(EDGES)
+    .join('line')
+    .attr('stroke', '#555')
+    .attr('stroke-width', d => 0.5 + Math.log2(d.weight))
+    .attr('stroke-opacity', d => 0.15 + Math.min(d.weight / 10, 0.4));
+
+// ── Draw nodes ───────────────────────────────────────────────────────
+function getRadius(d) {
+    return Math.min(4 + Math.sqrt(d.flightCount) * 1.5, 25);
+}
+
+const node = g.append('g')
+    .attr('class', 'nodes')
+    .selectAll('circle')
+    .data(NODES)
+    .join('circle')
+    .attr('r', d => getRadius(d))
+    .attr('fill', d => CATEGORY_COLORS[d.category] || '#757575')
+    .attr('stroke', '#333')
+    .attr('stroke-width', 1)
+    .attr('cursor', 'pointer')
+    .call(d3.drag()
+        .on('start', dragStarted)
+        .on('drag', dragged)
+        .on('end', dragEnded))
+    .on('click', (event, d) => {
+        event.stopPropagation();
+        showPopup(d, event);
+    });
+
+node.append('title').text(d => `${d.id} (${d.flightCount} flights)`);
+
+// ── Tick ─────────────────────────────────────────────────────────────
+simulation.on('tick', () => {
+    link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+    node
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y);
+});
+
+// ── Drag behavior ────────────────────────────────────────────────────
+function dragStarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+}
+function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+}
+function dragEnded(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+}
+
+// ── Click popup ──────────────────────────────────────────────────────
+let popupEl = null;
+
+function showPopup(d, event) {
+    closePopup();
+
+    const adj = adjacency[d.id] || {};
+    const connections = Object.entries(adj)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+    const catColor = CATEGORY_COLORS[d.category] || '#757575';
+
+    let connHtml = '';
+    connections.forEach(([name, count]) => {
+        connHtml += '<div class="popup-conn-row"><span>' + name + '</span><span class="popup-conn-count">' + count + '</span></div>';
+    });
+
+    const profileLink = d.slug
+        ? '<a class="popup-link" href="person.html#' + d.slug + '">View Profile &rarr;</a>'
+        : '';
+
+    popupEl = document.createElement('div');
+    popupEl.className = 'node-popup';
+    popupEl.innerHTML =
+        '<button class="popup-close" onclick="closePopup()">&times;</button>' +
+        '<div class="popup-name">' + d.id + '</div>' +
+        '<span class="popup-badge" style="background:' + catColor + '22; color:' + catColor + '; border: 1px solid ' + catColor + ';">' + d.category + '</span>' +
+        '<div class="popup-flights"><strong>' + d.flightCount + '</strong> flights</div>' +
+        (connections.length > 0 ? '<div class="popup-conn-title">Top Connections</div>' + connHtml : '') +
+        profileLink;
+
+    // Position near the click, clamped to viewport
+    const rect = container.getBoundingClientRect();
+    let left = event.clientX - rect.left + 16;
+    let top = event.clientY - rect.top - 20;
+    if (left + 320 > rect.width) left = left - 340;
+    if (top + 300 > rect.height) top = rect.height - 310;
+    if (top < 0) top = 10;
+
+    popupEl.style.left = left + 'px';
+    popupEl.style.top = top + 'px';
+
+    container.appendChild(popupEl);
+}
+
+function closePopup() {
+    if (popupEl) {
+        popupEl.remove();
+        popupEl = null;
+    }
+}
+
+svg.on('click', () => { closePopup(); });
+
+// ── Search ───────────────────────────────────────────────────────────
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    if (!query) {
+        resetView();
+        return;
+    }
+    node
+        .attr('opacity', d => d.id.toLowerCase().includes(query) ? 1 : 0.08)
+        .attr('stroke', d => d.id.toLowerCase().includes(query) ? '#fff' : '#333')
+        .attr('stroke-width', d => d.id.toLowerCase().includes(query) ? 2 : 1);
+    link.attr('stroke-opacity', 0.03);
+});
+
+// ── Category checkboxes ──────────────────────────────────────────────
+const catContainer = document.getElementById('catFilters');
+const catState = {};
+
+CATEGORIES.forEach(cat => {
+    catState[cat] = true;
+    const label = document.createElement('label');
+    label.className = 'cat-filter-item';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = true;
+    cb.addEventListener('change', () => {
+        catState[cat] = cb.checked;
+        applyCategoryFilter();
+    });
+    const colorDot = document.createElement('span');
+    colorDot.style.cssText = 'display:inline-block;width:10px;height:10px;border-radius:50%;background:' + (CATEGORY_COLORS[cat] || '#757575');
+    const txt = document.createTextNode(' ' + cat);
+    label.appendChild(cb);
+    label.appendChild(colorDot);
+    label.appendChild(txt);
+    catContainer.appendChild(label);
+});
+
+function applyCategoryFilter() {
+    const activeNames = new Set();
+    node
+        .attr('opacity', d => {
+            const visible = catState[d.category];
+            if (visible) activeNames.add(d.id);
+            return visible ? 1 : 0.05;
+        })
+        .attr('stroke', d => catState[d.category] ? '#333' : '#222')
+        .attr('stroke-width', 1);
+    link.attr('stroke-opacity', d => {
+        const sId = typeof d.source === 'object' ? d.source.id : d.source;
+        const tId = typeof d.target === 'object' ? d.target.id : d.target;
+        return (activeNames.has(sId) && activeNames.has(tId)) ? 0.15 + Math.min(d.weight / 10, 0.4) : 0.02;
+    });
+}
+
+// ── Reset ────────────────────────────────────────────────────────────
+document.getElementById('resetBtn').addEventListener('click', () => {
+    searchInput.value = '';
+    // Reset category checkboxes
+    document.querySelectorAll('#catFilters input[type="checkbox"]').forEach(cb => { cb.checked = true; });
+    CATEGORIES.forEach(cat => { catState[cat] = true; });
+    resetView();
+    closePopup();
+    document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+});
+
+function resetView() {
+    node
+        .attr('opacity', 1)
+        .attr('stroke', '#333')
+        .attr('stroke-width', 1);
+    link
+        .attr('stroke-opacity', d => 0.15 + Math.min(d.weight / 10, 0.4));
+}
+
+// ── Sidebar ──────────────────────────────────────────────────────────
+const sidebarList = document.getElementById('sidebarList');
+
+TOP_CONNECTED.forEach(([name, count], i) => {
+    const div = document.createElement('div');
+    div.className = 'sidebar-item';
+    div.innerHTML = '<span class="sidebar-rank">' + (i + 1) + '</span>' +
+        '<span class="sidebar-name">' + name + '</span>' +
+        '<span class="sidebar-count">' + count + '</span>';
+    div.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+        div.classList.add('active');
+        highlightNode(name);
+    });
+    sidebarList.appendChild(div);
+});
+
+function highlightNode(name) {
+    searchInput.value = '';
+    const connSet = new Set([name]);
+    if (adjacency[name]) {
+        Object.keys(adjacency[name]).forEach(n => connSet.add(n));
+    }
+    node
+        .attr('opacity', d => connSet.has(d.id) ? 1 : 0.05)
+        .attr('stroke', d => d.id === name ? '#fff' : '#333')
+        .attr('stroke-width', d => d.id === name ? 3 : 1);
+    link.attr('stroke-opacity', d => {
+        const sId = typeof d.source === 'object' ? d.source.id : d.source;
+        const tId = typeof d.target === 'object' ? d.target.id : d.target;
+        return (sId === name || tId === name) ? 0.6 : 0.02;
+    });
+
+    // Pan to the highlighted node
+    const target = NODES.find(n => n.id === name);
+    if (target && target.x != null) {
+        const transform = d3.zoomTransform(svg.node());
+        const newTransform = d3.zoomIdentity
+            .translate(width / 2, height / 2)
+            .scale(transform.k)
+            .translate(-target.x, -target.y);
+        svg.transition().duration(600).call(zoom.transform, newTransform);
+    }
+}
+
+// ── Handle window resize ─────────────────────────────────────────────
+window.addEventListener('resize', () => {
+    simulation.force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2));
+    simulation.alpha(0.3).restart();
+});
+</script>
+
+</body>
+</html>

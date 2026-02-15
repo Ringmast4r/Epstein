@@ -29,6 +29,18 @@ No PDFs are stored here — only the manifest/index.
 ### [&#x2708; Interactive Flight Map — 1,708 Flights](https://ringmast4r.github.io/Epstein/flights.html)
 135 airports. 138 passengers. Filter by name, date, airport. Click any airport to see who flew through it.
 
+### [&#x1F578; Passenger Network](https://ringmast4r.github.io/Epstein/network.html)
+D3.js force-directed graph showing who flew with whom. 138 passengers, ~500 connections. Click any node for details.
+
+### [&#x1F464; Person Profiles — 1,416 Individuals](https://ringmast4r.github.io/Epstein/person.html)
+Searchable directory of every named individual. Flight histories, connections, bios. Filter by category.
+
+### [&#x1F3E0; Property Timeline — 5 Properties](https://ringmast4r.github.io/Epstein/properties.html)
+Little St. James, Palm Beach, NYC, Paris, Zorro Ranch. Visit histories, top visitors, chronological timelines.
+
+### [&#x1F4CA; Route Analysis](https://ringmast4r.github.io/Epstein/routes.html)
+Top routes, yearly trends, monthly heatmap, aircraft breakdown. Date range filtering.
+
 ## Key Numbers
 
 | | |
@@ -87,11 +99,20 @@ python tools/monitor.py --seed
 ├── banner.svg                      # Auto-generated arrest counter banner
 ├── docs/
 │   ├── index.html                  # GitHub Pages main site
-│   └── flights.html                # Interactive flight map (Leaflet.js)
+│   ├── flights.html                # Interactive flight map (Leaflet.js)
+│   ├── network.html                # Passenger network graph (D3.js)
+│   ├── person.html                 # Person profiles (hash-routed SPA)
+│   ├── properties.html             # Property visit timelines (Leaflet.js)
+│   └── routes.html                 # Route analysis dashboard (D3.js + Leaflet)
 ├── tools/
 │   ├── monitor.py                  # Main monitoring script
 │   ├── fetch_flights.py            # Flight data fetcher (EpsteinExposed API)
+│   ├── build_utils.py              # Shared build utilities (airports, data loaders)
 │   ├── build_flights_page.py       # Flight map HTML generator
+│   ├── build_network_page.py       # Network graph HTML generator
+│   ├── build_person_page.py        # Person profiles HTML generator
+│   ├── build_properties_page.py    # Properties timeline HTML generator
+│   ├── build_routes_page.py        # Route analysis HTML generator
 │   └── requirements.txt            # Python dependencies
 ├── data/
 │   ├── flights.json                # 1,708 flights (1997-2019)
