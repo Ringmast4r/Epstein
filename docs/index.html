@@ -339,6 +339,146 @@
             margin-bottom: 16px;
         }
 
+        /* Names section */
+        .names {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .names-intro {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .names-group {
+            margin-bottom: 40px;
+        }
+        .names-group-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: #990000;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .names-group-desc {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 16px;
+        }
+        .name-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            gap: 12px;
+        }
+        .name-card:last-child { border-bottom: none; }
+        .name-who {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            min-width: 200px;
+        }
+        .name-role {
+            font-size: 13px;
+            color: #555;
+            flex: 1;
+        }
+        .name-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+        .status-prison { background: #990000; color: #fff; }
+        .status-dead { background: #333; color: #fff; }
+        .status-resigned { background: #b35900; color: #fff; }
+        .status-charged { background: #7a0000; color: #fff; }
+        .status-named { background: #f0f0f0; color: #333; border: 1px solid #ccc; }
+        .status-free { background: #fff0f0; color: #990000; border: 1px solid #cc0000; }
+        .consequence-banner {
+            background: #990000;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .consequence-banner h3 {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+        .consequence-banner p {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 40px 16px 30px; }
+            .exposed { font-size: 11px; letter-spacing: 3px; }
+            .nobody { font-size: 16px; }
+            .children { margin: 20px 10px 0; padding: 14px; }
+            .children p { font-size: 14px; }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .stat { padding: 18px 10px; }
+            .stat-value { font-size: 20px; }
+            .stat-label { font-size: 10px; letter-spacing: 1px; }
+
+            .datasets { padding: 30px 12px; }
+            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            th, td { padding: 10px 12px; font-size: 13px; white-space: nowrap; }
+
+            .download-all { padding: 0 12px 30px; }
+            .download-all-box {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .download-all-btn { width: 100%; text-align: center; }
+
+            .download-instructions { padding: 0 12px 30px; }
+            .download-instructions pre { font-size: 12px; padding: 14px; }
+
+            .names { padding: 30px 12px; }
+            .name-card {
+                flex-direction: column;
+                gap: 4px;
+                padding: 10px 0;
+            }
+            .name-who { min-width: unset; font-size: 14px; }
+            .name-role { font-size: 12px; }
+            .name-status { align-self: flex-start; }
+
+            .timeline { padding: 30px 12px; }
+            .tl-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .tl-date { min-width: unset; }
+            .tl-text { font-size: 14px; }
+
+            .about { padding: 30px 12px; }
+            .section-title { font-size: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .arrest-count { margin-bottom: 0; }
+            .arrests-label { letter-spacing: 5px; margin-bottom: 25px; }
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -543,6 +683,309 @@
 
 <span class="comment"># Or use curl with parallel downloads</span>
 <span class="cmd">xargs</span> -n 1 -P 10 curl -O &lt; all-urls.txt</pre>
+</section>
+
+<section class="names">
+    <h2 class="section-title">The Names</h2>
+    <p class="names-intro">All individuals named across DOJ files, court records, flight logs, emails, and media reporting. Being named does NOT equal guilt &mdash; names appear for many reasons. But the public deserves to see who keeps showing up.</p>
+
+    <div class="consequence-banner">
+        <h3>Consequences So Far</h3>
+        <p>The only people facing consequences are in Europe. America: silence.</p>
+    </div>
+
+    <!-- Consequence Tracker -->
+    <div class="names-group">
+        <div class="names-group-title">Resignation &amp; Consequence Tracker</div>
+        <div class="names-group-desc">Who has actually faced consequences since the files dropped.</div>
+
+        <div class="name-card">
+            <div class="name-who">Prince Andrew</div>
+            <div class="name-role">British royal &mdash; stripped of titles, evicted from royal residence</div>
+            <div class="name-status status-resigned">Oct 2025</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Peter Mandelson</div>
+            <div class="name-role">Former UK Ambassador &mdash; resigned House of Lords; criminal investigation opened by London Met Police</div>
+            <div class="name-status status-charged">Charged</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Thorbjorn Jagland</div>
+            <div class="name-role">Former Norwegian PM &mdash; charged with "gross corruption"; faces up to 10 years</div>
+            <div class="name-status status-charged">Charged</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Kathryn Ruemmler</div>
+            <div class="name-role">Goldman Sachs CLO, former Obama White House Counsel &mdash; one of 3 people Epstein called after 2019 arrest</div>
+            <div class="name-status status-resigned">Resigned</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Miroslav Lajcak</div>
+            <div class="name-role">Slovak politician, former UN GA President &mdash; texts discussing women</div>
+            <div class="name-status status-resigned">Resigned</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Mona Juul</div>
+            <div class="name-role">Norway's former Ambassador &mdash; Epstein left $10M to her children in his will</div>
+            <div class="name-status status-resigned">Resigned</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Jack Lang</div>
+            <div class="name-role">Former French Culture Minister &mdash; resigned; being questioned by French FM</div>
+            <div class="name-status status-resigned">Resigned</div>
+        </div>
+    </div>
+
+    <!-- Six Names from Congress -->
+    <div class="names-group">
+        <div class="names-group-title">6 Names Read on the House Floor</div>
+        <div class="names-group-desc">Rep. Ro Khanna (Feb 10, 2026) said these individuals are "likely incriminated." Deputy AG Blanche called them "completely random people."</div>
+
+        <div class="name-card">
+            <div class="name-who">Leslie Wexner</div>
+            <div class="name-role">Billionaire (L Brands / Victoria's Secret) &mdash; Epstein's former money manager; labeled FBI co-conspirator in 2019</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Sultan Ahmed bin Sulayem</div>
+            <div class="name-role">Emirati businessman, DP World chairman</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Salvatore Nuara</div>
+            <div class="name-role">Under investigation</div>
+            <div class="name-status status-named">Named</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Zurab Mikeladze</div>
+            <div class="name-role">Under investigation</div>
+            <div class="name-status status-named">Named</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Leonic Leonov</div>
+            <div class="name-role">Under investigation</div>
+            <div class="name-status status-named">Named</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Nicola Caputo</div>
+            <div class="name-role">Under investigation</div>
+            <div class="name-status status-named">Named</div>
+        </div>
+    </div>
+
+    <!-- Inner Circle -->
+    <div class="names-group">
+        <div class="names-group-title">Inner Circle / Operations</div>
+        <div class="names-group-desc">The people who ran Epstein's operation day-to-day.</div>
+
+        <div class="name-card">
+            <div class="name-who">Ghislaine Maxwell</div>
+            <div class="name-role">Co-conspirator, recruiter &mdash; 13,169 mentions in files</div>
+            <div class="name-status status-prison">20 Years</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Jean-Luc Brunel</div>
+            <div class="name-role">French modeling agent, MC2 founder &mdash; 25 flights on Epstein's jet</div>
+            <div class="name-status status-dead">Dead</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Lesley Groff</div>
+            <div class="name-role">Executive assistant, scheduler &mdash; 157,613 mentions; most mentioned name in files</div>
+            <div class="name-status status-free">Free (NPA)</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Sarah Kellen</div>
+            <div class="name-role">Named co-conspirator, organizer &mdash; now an interior designer</div>
+            <div class="name-status status-free">Free (NPA)</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Nadia Marcinkova</div>
+            <div class="name-role">Named co-conspirator, recruited as a teenager from Yugoslavia &mdash; now FAA-certified pilot</div>
+            <div class="name-status status-free">Free (NPA)</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Adriana Ross</div>
+            <div class="name-role">Named co-conspirator, former model</div>
+            <div class="name-status status-free">Free (NPA)</div>
+        </div>
+    </div>
+
+    <!-- Presidents & Politicians -->
+    <div class="names-group">
+        <div class="names-group-title">Presidents &amp; Politicians</div>
+        <div class="names-group-desc">U.S. presidents, White House staff, and senior government officials named in the files.</div>
+
+        <div class="name-card">
+            <div class="name-who">Donald Trump</div>
+            <div class="name-role">45th/47th President &mdash; thousands of references; Epstein email states Trump "knew about the girls"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Bill Clinton</div>
+            <div class="name-role">42nd President &mdash; photos with Maxwell; 4 trips on Epstein's jet</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Ehud Barak</div>
+            <div class="name-role">Former Israeli PM &mdash; regular contact for years; stayed at NYC residence</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Alexander Acosta</div>
+            <div class="name-role">Former US Attorney &mdash; negotiated secret 2008 plea deal shielding co-conspirators</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Alan Dershowitz</div>
+            <div class="name-role">Lawyer &mdash; 153 documents; negotiated 2008 NPA; accused by Giuffre</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+    </div>
+
+    <!-- Tech & Finance -->
+    <div class="names-group">
+        <div class="names-group-title">Tech Billionaires &amp; Wall Street</div>
+        <div class="names-group-desc">Silicon Valley and finance figures named in emails, flight logs, and correspondence.</div>
+
+        <div class="name-card">
+            <div class="name-who">Elon Musk</div>
+            <div class="name-role">Tesla/SpaceX &mdash; emails 2012-2014 discussing visiting island; assistant noted "to go to the island on Dec. 6th"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Bill Gates</div>
+            <div class="name-role">Microsoft &mdash; Epstein emails with unverified claims; draft letter mentions "helping Bill to get drugs"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Jeff Bezos</div>
+            <div class="name-role">Amazon &mdash; named in Oct 2009 email as present at Maxwell after-party</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Sergey Brin</div>
+            <div class="name-role">Google co-founder &mdash; made plans to meet Epstein and Maxwell at townhouse (2003)</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Leon Black</div>
+            <div class="name-role">Apollo Global &mdash; paid Epstein $158M for "financial advice" (2012-2017)</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Howard Lutnick</div>
+            <div class="name-role">Cantor Fitzgerald CEO, Trump Commerce Secretary &mdash; family visited Epstein's island Dec 2012</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Steven Tisch</div>
+            <div class="name-role">NY Giants co-owner &mdash; 400+ mentions; 2013 emails asking about "Ukrainian Girl" - "pro or civilian?"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Glenn Dubin</div>
+            <div class="name-role">Hedge fund billionaire &mdash; victim testified she was instructed to provide sexual services</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Leslie Wexner</div>
+            <div class="name-role">L Brands / Victoria's Secret &mdash; Epstein's money manager; FBI co-conspirator label</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+    </div>
+
+    <!-- Royalty -->
+    <div class="names-group">
+        <div class="names-group-title">Royalty &amp; Foreign Leaders</div>
+        <div class="names-group-desc">The only category where people are actually facing consequences.</div>
+
+        <div class="name-card">
+            <div class="name-who">Prince Andrew</div>
+            <div class="name-role">British royal &mdash; hundreds of mentions; accused by Giuffre of abuse at age 17</div>
+            <div class="name-status status-resigned">Stripped</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Tony Blair</div>
+            <div class="name-role">Former UK PM &mdash; black book entry</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Peter Mandelson</div>
+            <div class="name-role">Former UK Ambassador &mdash; shared sensitive UK/EU financial info with Epstein while in cabinet</div>
+            <div class="name-status status-charged">Under Investigation</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Thorbjorn Jagland</div>
+            <div class="name-role">Former Norwegian PM &mdash; stayed in Epstein's homes; visited island</div>
+            <div class="name-status status-charged">Charged</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Sarah Ferguson</div>
+            <div class="name-role">Duchess of York &mdash; Epstein paid off her debts</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+    </div>
+
+    <!-- Entertainment -->
+    <div class="names-group">
+        <div class="names-group-title">Entertainment &amp; Media</div>
+        <div class="names-group-desc">Actors, musicians, and media figures in flight logs, photos, and correspondence.</div>
+
+        <div class="name-card">
+            <div class="name-who">Kevin Spacey</div>
+            <div class="name-role">Actor &mdash; photos with Clinton and Maxwell; flight logs</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Woody Allen</div>
+            <div class="name-role">Filmmaker &mdash; texts about White House trip; joked about his "rap sheet"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Naomi Campbell</div>
+            <div class="name-role">Supermodel &mdash; flight logs</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Chris Tucker</div>
+            <div class="name-role">Comedian &mdash; photos at airports with Maxwell; flight logs</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Dr. Mehmet Oz</div>
+            <div class="name-role">TV doctor, CMS Administrator &mdash; Epstein paid for his travel; invited to events</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+    </div>
+
+    <!-- Academia -->
+    <div class="names-group">
+        <div class="names-group-title">Academia &amp; Science</div>
+        <div class="names-group-desc">Professors, researchers, and university leaders who took Epstein's money and access.</div>
+
+        <div class="name-card">
+            <div class="name-who">Noam Chomsky</div>
+            <div class="name-role">MIT &mdash; 50+ documents; called Epstein "a highly valued friend"</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Larry Summers</div>
+            <div class="name-role">Harvard president, Clinton Treasury Sec. &mdash; frequent meetings/dinners</div>
+            <div class="name-status status-free">Free</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Joi Ito</div>
+            <div class="name-role">Former MIT Media Lab director &mdash; received $1.7M from Epstein; concealed donations</div>
+            <div class="name-status status-resigned">Resigned 2019</div>
+        </div>
+        <div class="name-card">
+            <div class="name-who">Marvin Minsky</div>
+            <div class="name-role">MIT AI Lab co-founder &mdash; Giuffre stated she was directed to have sex with him at Epstein's island</div>
+            <div class="name-status status-dead">Dead</div>
+        </div>
+    </div>
+
+    <p style="font-size:13px; color:#888; margin-top:20px;">Full name list with sources: <a href="https://github.com/Ringmast4r/Epstein/blob/master/NOTES/names.md">NOTES/names.md</a> &nbsp;|&nbsp; Searchable black book: <a href="https://epsteinsblackbook.com/all-names">epsteinsblackbook.com</a></p>
 </section>
 
 <section class="timeline">
