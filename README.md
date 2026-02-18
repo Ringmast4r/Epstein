@@ -4,6 +4,10 @@
 
 <br/>
 
+![Visitors](https://hits.sh/github.com/ringmast4r/Epstein.svg?style=flat-square&label=visitors&color=555555)
+
+
+
 > **Children were raped by the most powerful people on the planet.**
 > **The evidence is public. The names are known. The flight logs exist.**
 > **And every single one of them is still free.**
