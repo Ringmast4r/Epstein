@@ -2,6 +2,9 @@
 
 All detected changes to the Epstein Files index, newest first.
 
+## 2026-03-03
+- **Dataset 9**: 1 files may have been removed (EFTA00279029)
+
 ## 2026-03-02
 - **Dataset 6**: 1 files may have been removed (EFTA00008529)
 - **Dataset 8**: 1 files may have been removed (EFTA00032569)
