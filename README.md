@@ -89,7 +89,7 @@ Top routes, yearly trends, monthly heatmap, aircraft breakdown. Date range filte
 
 ## How It Worked
 
-A GitHub Action ran `tools/monitor.py` every 6 hours. The schedule was removed on 6 August 2026; the job is kept for the record and can now only be started by hand. Each run:
+A GitHub Action ran `tools/monitor.py` every 6 hours. On 6 August 2026 the schedule was removed and the workflow was disabled; the file is kept as a record of what ran. Each run:
 
 1. Checked DOJ listing pages for each dataset (page 1 + last page)
 2. Checked for new datasets beyond the current 12

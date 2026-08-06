@@ -6,10 +6,11 @@
 #
 # They are never going to arrest anyone. The counter is stopped.
 #
-# The schedule is removed. Nothing runs on its own anymore. The manifests, the
-# changelog, and the flight data stay exactly where they are — the record is the
-# point, not the ticking. The job below is kept for the record and can only be
-# started by hand.
+# The schedule is removed and the workflow is disabled in the Actions tab.
+# Nothing runs on its own anymore. The manifests, the changelog, and the flight
+# data stay exactly where they are — the record is the point, not the ticking.
+# The job below is kept as a record of what ran; even if it were re-enabled the
+# counter stays frozen (see COUNTER_RETIRED in tools/monitor.py).
 
 name: Monitor Epstein Files Index (RETIRED)
 
