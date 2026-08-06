@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epstein Files Monitor — 0 Arrests</title>
-    <meta name="description" content="Tracking 1,380,946 DOJ Epstein files. Zero arrests. The counter keeps going.">
+    <meta name="description" content="Tracking 1,380,946 DOJ Epstein files. Zero arrests. The counter stopped at 230 days.">
     <meta property="og:title" content="Epstein Files Monitor — 0 Arrests">
-    <meta property="og:description" content="It has been 58+ days since the DOJ released 931,000 files exposing a global trafficking network. Nobody has been arrested.">
+    <meta property="og:description" content="230 days since the DOJ released 931,000 files exposing a global trafficking network. Nobody has been arrested. The counter is retired.">
     <meta property="og:type" content="website">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -538,11 +538,13 @@
     <div class="arrest-count">0</div>
     <div class="arrests-label">ARRESTS</div>
 
-    <div class="days-label">It has been</div>
+    <div class="days-label">The counter stopped at</div>
     <div class="days-count"><span id="days-count">&mdash;</span> DAYS</div>
     <div class="days-since">since the DOJ released 931,000+ files exposing a global trafficking network involving billionaires, politicians, and royalty.</div>
 
     <div class="nobody">Nobody has been arrested. Nobody has been charged. Not one.</div>
+
+    <div class="nobody" style="color: #ff2222; margin-top: 18px;">They are never going to arrest anyone.</div>
 
     <div class="divider"></div>
 
@@ -1130,18 +1132,18 @@
 </section>
 
 <footer>
-    <p>This counter updates automatically. Source on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
-    <p style="margin-top: 8px;">The number goes up every day until someone is in handcuffs.</p>
+    <p>The counter was retired on 6 August 2026 at 230 days and 0 arrests. Source on <a href="https://github.com/Ringmast4r/Epstein">GitHub</a>.</p>
+    <p style="margin-top: 8px;">It was going to go up every day until someone was in handcuffs. Nobody is going to be in handcuffs. The archive stays; the counting stops.</p>
 </footer>
 
 <div class="pulse-bar"></div>
 
 <script>
-    const dropDate = new Date('2025-12-19T00:00:00Z');
-    const now = new Date();
-    const days = Math.floor((now - dropDate) / (1000 * 60 * 60 * 24));
-    document.getElementById('days-count').textContent = days;
-    document.title = `Epstein Files Monitor — 0 Arrests, ${days} Days`;
+    // The counter ran from the first DOJ release until 6 August 2026 and stopped
+    // at 230 days, 0 arrests. They are never going to arrest anyone.
+    const FINAL_DAYS = 230;
+    document.getElementById('days-count').textContent = FINAL_DAYS;
+    document.title = `Epstein Files Monitor — 0 Arrests, ${FINAL_DAYS} Days, Counter Stopped`;
 </script>
 
 </body>

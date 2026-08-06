@@ -1,8 +1,19 @@
-name: Monitor Epstein Files Index
+# RETIRED — 6 August 2026.
+#
+# This action ran every 6 hours from December 2025 to August 2026, counting the
+# days since the DOJ released 931,000 files and the arrests that followed. It
+# counted to 230 days and 0 arrests.
+#
+# They are never going to arrest anyone. The counter is stopped.
+#
+# The schedule is removed. Nothing runs on its own anymore. The manifests, the
+# changelog, and the flight data stay exactly where they are — the record is the
+# point, not the ticking. The job below is kept for the record and can only be
+# started by hand.
+
+name: Monitor Epstein Files Index (RETIRED)
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
   workflow_dispatch:
     inputs:
       seed:

@@ -35,6 +35,18 @@ HTML_PATH = REPO_ROOT / "docs" / "index.html"
 
 DATA_DROP_DATE = datetime(2025, 12, 19, tzinfo=timezone.utc)  # First DOJ release
 
+# --- Retirement ---
+#
+# The day counter ran from the first DOJ release until 6 August 2026. It reached
+# 230 days and 0 arrests. They are never going to arrest anyone, so the counter
+# is stopped and frozen at its final value.
+#
+# The monitoring itself still works if run by hand — manifests, removals, and the
+# changelog are the part worth keeping. Only the counting is over.
+COUNTER_RETIRED = True
+COUNTER_FINAL_DAYS = 230
+COUNTER_RETIRED_DATE = "2026-08-06"
+
 DOJ_BASE = "https://www.justice.gov"
 DOJ_LISTING = f"{DOJ_BASE}/epstein/doj-disclosures"
 DOJ_FILES = f"{DOJ_BASE}/epstein/files"
@@ -169,7 +181,15 @@ def append_changelog(entries):
 
 
 def update_readme():
-    """Update the day counter in README.md and regenerate the SVG banner."""
+    """Update the day counter in README.md and regenerate the SVG banner.
+
+    Retired: the counter is frozen, so this leaves the README and banner alone.
+    """
+    if COUNTER_RETIRED:
+        print(f"  Counter retired {COUNTER_RETIRED_DATE} at {COUNTER_FINAL_DAYS} days "
+              "- banner and README left frozen")
+        return
+
     days = (datetime.now(timezone.utc) - DATA_DROP_DATE).days
 
     # Update README day count

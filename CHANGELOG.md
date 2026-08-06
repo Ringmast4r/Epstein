@@ -2,6 +2,15 @@
 
 All detected changes to the Epstein Files index, newest first.
 
+## 2026-08-06 — MONITORING RETIRED
+
+- **The counter is stopped at 230 days and 0 arrests.** They are never going to arrest anyone.
+- Removed the 6-hour `schedule:` trigger from `.github/workflows/monitor.yml`. The job is kept for the record and is now manual-dispatch only.
+- Froze the day counter in `banner.svg`, `docs/index.html`, and `tools/monitor.py` (`COUNTER_RETIRED = True`). A manual run no longer rewrites the banner or the README.
+- Nothing was deleted. All 12 dataset manifests, the full changelog below, the flight map, the network graph, the person profiles, and the property timelines stay published exactly as they are.
+
+231 days would have meant the same thing as 230.
+
 ## 2026-08-05
 - **Dataset 3**: 1 files may have been removed (EFTA00003488)
 

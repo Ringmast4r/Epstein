@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
   <defs>
     <filter id="glow">
       <feGaussianBlur stdDeviation="2" result="blur"/>
@@ -7,8 +7,8 @@
   </defs>
 
   <!-- Background -->
-  <rect width="900" height="430" rx="12" fill="#0d0d0d"/>
-  <rect x="4" y="4" width="892" height="422" rx="10" fill="none" stroke="#cc0000" stroke-width="3"/>
+  <rect width="900" height="470" rx="12" fill="#0d0d0d"/>
+  <rect x="4" y="4" width="892" height="462" rx="10" fill="none" stroke="#cc0000" stroke-width="3"/>
 
   <!-- Red pulse bar top -->
   <rect x="4" y="4" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
@@ -17,24 +17,27 @@
   <text x="450" y="52" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="bold" fill="#cc0000" letter-spacing="6" filter="url(#glow)">&#x1F534; EXPOSED TRAFFICKERS, ENABLERS, AND CO-CONSPIRATORS &#x1F534;</text>
 
   <!-- Main arrest counter -->
-  <text x="450" y="140" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="100" font-weight="900" fill="#ff0000" filter="url(#glow)">0 ARRESTS</text>
+  <text x="450" y="145" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="100" font-weight="900" fill="#ff0000" filter="url(#glow)">0 ARRESTS</text>
 
-  <!-- Days counter -->
-  <text x="450" y="195" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="22" fill="#ff6666">It has been</text>
-  <text x="450" y="235" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="48" font-weight="900" fill="#ffffff">230 DAYS</text>
-  <text x="450" y="265" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">since the DOJ released 931,000+ files exposing a global trafficking network</text>
-  <text x="450" y="288" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">involving billionaires, politicians, and royalty.</text>
+  <!-- Days counter, stopped -->
+  <text x="450" y="192" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="22" fill="#ff6666">The counter stopped at</text>
+  <text x="450" y="234" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="48" font-weight="900" fill="#ffffff">230 DAYS</text>
+  <text x="450" y="264" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">since the DOJ released 931,000+ files exposing a global trafficking network</text>
+  <text x="450" y="287" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#ff6666">involving billionaires, politicians, and royalty.</text>
 
   <!-- Nobody line -->
-  <text x="450" y="325" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="bold" fill="#ffffff">Nobody has been arrested. Nobody has been charged. Not one.</text>
+  <text x="450" y="322" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="bold" fill="#ffffff">Nobody has been arrested. Nobody has been charged. Not one.</text>
+
+  <!-- Final verdict -->
+  <text x="450" y="364" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="27" font-weight="900" fill="#ff0000" filter="url(#glow)">THEY ARE NEVER GOING TO ARREST ANYONE.</text>
 
   <!-- Divider -->
-  <line x1="150" y1="348" x2="750" y2="348" stroke="#cc0000" stroke-width="1" opacity="0.6"/>
+  <line x1="150" y1="388" x2="750" y2="388" stroke="#cc0000" stroke-width="1" opacity="0.6"/>
 
   <!-- Bottom message -->
-  <text x="450" y="378" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999" font-style="italic">This is not left vs right. This is not political.</text>
-  <text x="450" y="400" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999" font-style="italic">This is raw evil vs. basic human decency.</text>
+  <text x="450" y="414" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999">Monitoring retired 6 August 2026. The record stays up. The counting stops.</text>
+  <text x="450" y="438" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#999999" font-style="italic">This is not left vs right. This is raw evil vs. basic human decency.</text>
 
   <!-- Red pulse bar bottom -->
-  <rect x="4" y="420" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
+  <rect x="4" y="460" width="892" height="6" rx="3" fill="#cc0000" opacity="0.9"/>
 </svg>

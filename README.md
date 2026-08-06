@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="banner.svg" alt="0 ARRESTS — 58 days since the Epstein files were released" width="900"/>
+<img src="banner.svg" alt="0 ARRESTS — the counter stopped at 230 days since the Epstein files were released" width="900"/>
 
 <br/>
 
@@ -16,17 +16,26 @@
 
 </div>
 
+> [!IMPORTANT]
+> **The counter is retired as of 6 August 2026. It stopped at 230 days and 0 arrests.**
+>
+> It was built to count upward until someone was in handcuffs. Nobody is going to be in handcuffs. Two hundred and thirty days, 931,000 files, 1,416 named individuals, 1,708 flights, a resignation, six names read aloud on the House floor, and not one arrest — not one charge. They are never going to arrest anyone.
+>
+> A counter that only measures how long nothing has happened stops being a countdown and starts being decoration. So the scheduled job is switched off and the number is frozen where it landed. **Nothing is deleted.** Every manifest, every changelog entry, every flight and name and property stays exactly where it is. The archive was always the point. The ticking was just hope.
+
 > [!CAUTION]
 > The DOJ released ~931,000 files exposing a global child sex trafficking network — then **removed bulk download links** and forced individual file retrieval across 931,000 PDFs to make access as difficult as possible. This repository exists to make sure nothing disappears without a record.
 
 ## What This Repo Does
 
-This repository **automatically monitors** the DOJ Epstein Files index every 6 hours:
-- Detects **new files** added to any dataset
-- Detects **files quietly removed** or altered
-- Detects **new datasets** appearing beyond the current 12
-- Maintains a running **changelog** of every change
-- Updates the day counter above — it keeps going up until someone is in handcuffs
+**Past tense as of 6 August 2026.** From December 2025 to August 2026 this repository automatically monitored the DOJ Epstein Files index every 6 hours:
+- Detected **new files** added to any dataset
+- Detected **files quietly removed** or altered
+- Detected **new datasets** appearing beyond the current 12
+- Maintained a running **changelog** of every change
+- Ticked the day counter upward — until it was retired at 230
+
+The scheduled action no longer runs. What it produced stays published: the manifests, the changelog, the flight map, the network graph, the person profiles, and the property timelines are all still here and still work.
 
 No PDFs are stored here — only the manifest/index.
 
@@ -53,6 +62,8 @@ Top routes, yearly trends, monthly heatmap, aircraft breakdown. Date range filte
 | **Total size** | ~360 GB |
 | **Datasets** | 12 |
 | **Arrests since release** | **0** |
+| **Days counted before retirement** | 230 |
+| **Counter retired** | Aug 6, 2026 |
 | **First release** | Dec 19, 2025 |
 | **Major dump** | Jan 30, 2026 (~3.5 million pages) |
 | **ZIP downloads killed by DOJ** | Feb 11, 2026 |
@@ -76,16 +87,18 @@ Top routes, yearly trends, monthly heatmap, aircraft breakdown. Date range filte
 | 11 | 331,655 | 25.5 GB | Jan 30, 2026 | Flight manifests, financials, seizure records |
 | 12 | ~150 | 114 MB | Dec 19, 2025 | Late productions, supplemental |
 
-## How It Works
+## How It Worked
 
-A GitHub Action runs `tools/monitor.py` every 6 hours:
+A GitHub Action ran `tools/monitor.py` every 6 hours. The schedule was removed on 6 August 2026; the job is kept for the record and can now only be started by hand. Each run:
 
-1. Checks DOJ listing pages for each dataset (page 1 + last page)
-2. Checks for new datasets beyond the current 12
-3. Spot-checks random files from the manifest via HEAD requests
-4. Compares against stored manifests in `manifests/`
-5. Logs all changes to `CHANGELOG.md`
-6. Auto-commits if anything changed
+1. Checked DOJ listing pages for each dataset (page 1 + last page)
+2. Checked for new datasets beyond the current 12
+3. Spot-checked random files from the manifest via HEAD requests
+4. Compared against stored manifests in `manifests/`
+5. Logged all changes to `CHANGELOG.md`
+6. Auto-committed if anything changed
+
+The manifest-diffing still works if you run it yourself. Only the counter is frozen — `COUNTER_RETIRED` in `tools/monitor.py` keeps the banner and README from being rewritten.
 
 ### Manual Seed
 
@@ -99,8 +112,8 @@ python tools/monitor.py --seed
 ## Project Structure
 
 ```
-├── .github/workflows/monitor.yml   # Scheduled monitoring action
-├── banner.svg                      # Auto-generated arrest counter banner
+├── .github/workflows/monitor.yml   # Monitoring action (RETIRED — no schedule, manual only)
+├── banner.svg                      # Arrest counter banner (frozen at 230 days)
 ├── docs/
 │   ├── index.html                  # GitHub Pages main site
 │   ├── flights.html                # Interactive flight map (Leaflet.js)
